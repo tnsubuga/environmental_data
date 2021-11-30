@@ -1,0 +1,292 @@
+---
+title: 'DataCamp Assignment: R Basics'
+author: "Timothy Nsubuga"
+date: "11/11/2021"
+output: html_document
+html_document:
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+editor_options: 
+  chunk_output_type: console
+---
+
+# Questions {.tabset .tabset-pills}
+
+## Section 1 Variables: Questions 1 - 6
+
+Create:
+
+A variable a that contains the text of your first name.
+
+```{r var containing name}
+a <- 'Tim'
+```
+
+
+A variable b1 that contains the number 45.6
+
+```{r var containing number}
+b1 <- 45.6
+```
+
+A variable b2 that contains the text “45.6”
+
+```{r var containing word}
+b2 <- "45.6"
+```
+
+A variable c1 that contains the sequence of integers from 0 to 3
+
+```{r var containing sequence of numbers}
+c1 <- 0:3
+```
+
+Hint: use the class() function to help with the questions below
+
+#### Q1(1pt): What type of data is contained in the variable a?
+```{r data type of a}
+class(a)
+```
+
+**a contains data of type character.**
+
+### Q2(1pt): What type of data is contained in the variable b1?
+
+```{r data type of b1}
+class(b1)
+```
+
+**b contains data of type numeric.**
+
+### Q3(1pt): What type of data is contained in the variable b2?
+
+```{r data type of b2}
+class(b2)
+```
+
+**b2 contains data of type character.**
+
+### Q4(2pt): What happens when you add b1 and b2 and why?
+
+```{r sum of b1 and b2}
+# b1 + b2
+
+```
+
+**Adding b1 and b2 results in an error because + is a binary operator that sums numeric data types and b2 is not a numeric data type.**
+
+### Q5(1pt): Are the variables b1 and c1 of the same type?
+```{r data type of c1 to compare to b1}
+class(c1)
+```
+
+**No, c1 contains data of type integer and b1 contains data of type numeric.**
+
+### Q6(3pt): Explain what happens when you add b1 and c1. Consider both the number of elements in each variable and the data types.
+
+```{r sum of b1 and c1}
+b1 + c1
+```
+
+**The result is a vector of 45.6 46.6 47.6 48.6. Element-wise summation is performed such that b1 is recycled 3 times and is summed with each element of c1.**
+
+## Section 2 Vectors: Questions 7 - 9
+
+Create a vector called v1 that contains a sequence of integers from -2 to 2.
+
+When you print the contents of v1, it should look like this:
+
+[1] -2 -1  0  1  2
+
+```{r vector containing -2 to 2}
+v1 <- -2:2
+v1
+```
+
+Now, use v1 to create a new vector called v2 whose elements are the elements of v1 multiplied by 3. It should look like this:
+
+[1] -6 -3  0  3  6
+
+```{r v2 is product of V1 and 3}
+v2 <- v1*3
+v2
+```
+
+Finally, calculate the sum of all the elements in v2.
+ 
+```{r sum of all elements in v2}
+sum(v2)
+```
+ 
+### Q7(1pt): Show the R code you used to create v1.
+ 
+ 
+```{r vector containing -2 to 2 again}
+v1 <- -2:2
+v1
+```
+
+ 
+### Q8(1pt): Show the R code you used to create v2.
+
+
+```{r v2 is product of V1 and 3 again}
+v2 <- v1*3
+v2
+```
+
+
+### Q9(1pt): Show the R code you used to calculate the sum of elements in v2.
+
+ 
+```{r sum of all elements in v2 again}
+sum(v2)
+```
+ 
+
+## Section 3: Matrices Questions 10 - 11
+
+Do you remember the byrow argument to the matrix() function?
+
+Create a vector called vec_4 whose elements are the integers from 1 to 12.
+
+```{r vector containing 1 to 12}
+vec_4 <- 1:12
+vec_4
+```
+
+Create a matrix mat_1 from vec_4 that has three rows and four columns. The values in mat_1 should be sequentially increasing by row.
+
+For example, the first row of mat_1 should contain the values 1, 2, 3, 4.
+
+```{r matrix of vec_4 by row }
+mat_1 = matrix(data = vec_4, nrow = 3, ncol = 4, byrow = TRUE)
+mat_1
+```
+
+Create a matrix mat_2 from vec_4 that has three rows and four columns. The values in mat_2 should be sequentially increasing by column.
+
+For example, the first column of mat_1 should contain the values 1, 2, 3.
+
+```{r matrix of vec_4 by col }
+mat_2 = matrix(data = vec_4, nrow = 3, ncol = 4, byrow = FALSE)
+mat_2
+```
+
+### Q10(1 pt) Show the code you used to create mat_1
+
+```{r matrix of vec_4 by row again}
+mat_1 = matrix(data = vec_4, nrow = 3, ncol = 4, byrow = TRUE)
+mat_1
+```
+
+### Q11(1 pt) Show the code you used to create mat_2
+
+
+```{r matrix of vec_4 by col again}
+mat_2 = matrix(data = vec_4, nrow = 3, ncol = 4, byrow = FALSE)
+mat_2
+```
+
+## Section 3: Lists Questions 12 - 14
+
+Create a list, named my_list_1 with following three elements:
+
+first element is numeric: 5.2
+second element is a string "five point two"
+third element is a vector of all integers from 0 to 5 [how do you do this?]
+Name the elements in my_list_1:
+
+“two”
+“one”
+“three”
+Make sure the elements in your list are in the order specified.
+
+Hint: remember the subsetting operators [[]] and $?
+
+```{r list containing specified named elements}
+
+my_list_1 <-list(5.2,"five point two", 0:5)
+my_list_1
+
+names(my_list_1) <- c('two','one','three' )
+```
+
+### Q12(2 pts): Show the R code you used to create my_list_1.
+
+
+```{r list containing specified named elements again}
+
+my_list_1 <-list(5.2,"five point two", 0:5)
+my_list_1
+
+names(my_list_1) <- c('two','one','three' )
+```
+
+### Q13(1pt): Show the R code that would select third element of the list.
+```{r get third element of my_list_1}
+my_list_1[[3]]
+```
+
+### Q14(1pt): Show the R code that selects the list element with the name “one”. Note: there are at least two ways to do this!
+
+```{r select value of element named "one"}
+
+my_list_1[[2]]
+
+my_list_1$one
+```
+
+## Section 4: Logical Tests and Subsetting Questions 15 - 16
+
+Run the following code to build a vector called my_vec:
+
+```{r create my_vec}
+my_vec = rep(1:3, 5)
+my_vec
+```
+
+Use the logical equality test operator == to create a vector, my_bool_vec, of Boolean values from my_vec.
+
+my_bool_vec should be the same length as my_vec.
+my_bool_vec should have TRUE values in the positions where my_vec has values of 3.
+You can run the following code to check that you have the correct values in my_bool_vec:
+
+```{r create my_bool_vec}
+my_bool_vec <- my_vec == 3
+my_bool_vec
+```
+
+```{r check if my_bool_vec has teh correct values}
+data.frame(my_vec, my_bool_vec)
+```
+
+Use my_bool_vec to retrieve all of the elements of my_vec that have a value of 3.
+
+Hint: Use the square bracket subsetting operator: [].
+
+Your result should look like this:
+
+ [1] 3 3 3 3 3
+ 
+```{r get all elements of my_vec that have a value of 3}
+my_vec[my_bool_vec == TRUE]
+
+```
+ 
+### Q15(3 pts.) Show the R code that you used to create my_bool_vec.
+
+
+```{r create my_bool_vec again}
+my_bool_vec <- my_vec == 3
+my_bool_vec
+```
+
+### Q16(2 pts.) Show the R code that you used to subset my_vec using my_boolean_vec.
+
+```{r get all elements of my_vec that have a value of 3 again}
+my_vec[my_bool_vec == TRUE]
+
+```
+ 

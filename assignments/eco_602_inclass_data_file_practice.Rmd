@@ -1,0 +1,33 @@
+---
+title: "In-Class Data File Practice"
+author: "Timothy Nsubuga"
+date: "9/21/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#Use here() and read.csv() to read the three files into data.frame objects called:
+# to suppress {r, recho = False} inputs 
+##dat_catrate
+##dat_delomys
+##dat_rope
+
+```{r}
+require(here)
+dat_catrate <-  read.csv(here("data","catrate.csv"))
+dat_delomys <-  read.csv(here("data", "delomys.csv"))
+dat_rope <- read.csv(here("data", "rope.csv"))
+```
+
+#Use head() to view the first few lines of each data frame.
+```{r}
+head(dat_catrate)
+head(dat_delomys)
+head(dat_rope)
+```
+#histogram of demlomy body length
+```{r}
+hist(dat_delomys$body_length, main = "Tim's Histogram of Delomy Body lengths", ylab = "count", xlab = "body length")
+```
+

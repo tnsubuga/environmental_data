@@ -1,0 +1,20 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+---
+title: "eco_602_inclass_data_exploration_1"
+author: "Timothy Nsubuga"
+date: "9/23/2021"
+output: html_document
+
+```{r}
+require(here)
+dat_hab = read.csv(here("data", "hab.sta.csv"))
+
+```
+```{r}
+dat_bird = read.csv(here("data", "birds.sta.csv"))
+```
+

@@ -1,0 +1,462 @@
+---
+title: "Using Models 2"
+author: "Timothy Nsubuga"
+date: "11/26/2021"
+output:
+   html_document:
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+editor_options: 
+  chunk_output_type: console
+---
+
+## Learning Objectives
+
+Review 1- and 2-sample t-tests
+
+Perform a 1-way Analysis of Variance (ANOVA)
+
+Perform a simple- and multiple- linear regressions
+
+Interpret model coefficient tables
+
+Interpret ANOVA tables
+
+# Walkthrough {.tabset .tabset-pills}
+
+## Recap of t-tests
+
+Recall the simple 1- and 2-sample t-tests.
+
+T-tests are univariate tests that we can use to determine whether we have good evidence that:
+
+The mean of one sample is different from a fixed value.
+The means of two samples are different from each other.
+In R, the t-test syntax is simple.
+
+## 1-sample t-test
+Try running a 1-sample t-test on the Gentoo penguin flipper lengths:
+
+```{r 1-sample two-tailed t-test on penguins}
+
+require(palmerpenguins)
+
+t.test(subset(penguins, species == "Gentoo")$flipper_length_mm)
+
+```
+
+What was the null hypothesis? Is it a sensible null hypothesis?
+
+**The null hypothesis was that mean Gentoo flipper length was equal to zero. It is not sensible.**
+
+Instead of comparing Gentoo penguin flipper lengths to zero, let’s test whether they are equal to 218 mm:
+
+```{r two-tailed test with value}
+t.test(
+  x = subset(penguins, species == "Gentoo")$flipper_length_mm,
+  mu = 218
+)
+```
+
+What was the null hypothesis this time?
+
+Did you find strong evidence to reject the null?
+
+**The null hypothesis was that mean Gentoo flipper length was equal to 218mm. Due to a p-value of 0.1669, we do not have strong evidence to reject this null hypothesis.**
+
+Let’s try a one-tailed alternative hypothesis: Gentoo penguin flippers are smaller than 218 mm:
+
+
+```{r one-tailed test}
+t.test(
+  x = subset(penguins, species == "Gentoo")$flipper_length_mm,
+  mu = 218,
+  alternative = "less"
+)
+```
+
+Did you find stronger evidence against the null this time?
+
+What was the 95% confidence interval?
+
+**Yes, while we cannot reject the null hypothesis in this case as well, the p-value of 0.08347 is lower.**
+
+**The 95% confidence interval was -Inf 218.1561.**
+
+## 2-sample t-test
+
+Instead of comparing the flipper length of Gentoo penguins to a fixed value, I could compare the flipper lengths of two species:
+
+```{r 2 sample two-tailed test comparing Adelie and Gentoo flipper lengths}
+t.test(flipper_length_mm ~ species, data = subset(penguins, species != "Chinstrap"))
+```
+
+Referring back to the directional alternative hypothesis with a 1-sample t-test above, how could I modify the code to test the alternative hypothesis that Adelie penguins have shorter than Gentoo penguins?
+
+```{r 2 sample one-tailed test comparing Adelie and Gentoo flipper lengths}
+t.test(flipper_length_mm ~ species, data = subset(penguins, species != "Chinstrap"),
+         
+  alternative = "less"    
+       )
+```
+
+## 1 - Analysis of Variance (ANOVA)
+To gain some experience with 1-way Analysis of Variance, you’ll be working with the penguin data.
+
+Model 1: Body mass explained by species
+Response variable: body mass
+
+continuous variable
+
+ratio scale
+
+Predictor variable: species
+
+categorical variable
+
+nominal scale
+
+## 1-Way Analysis of Variance: Procedure
+
+To perform an ANOVA in R, you can use this procedure:
+
+Perform graphical and numerical data exploration
+Fit a linear model using lm()
+Examine the model coefficient table using summary()
+Conduct the Analysis of Variance using anova()
+I’ll walk through an example using penguin body mass and species.
+
+You can review the slide deck for Interpreting model coefficient and ANOVA tables for further examples and a guide to interpreting model coefficients.
+
+Data exploration
+Graphical
+We can explore normality using histograms and density plots:
+
+```{r}
+par(mfrow = c(1, 2))
+hist(penguins$body_mass_g, breaks = 80, main = "histogram of body mass", xlab = "body mass (g)")
+plot(density(penguins$body_mass_g, na.rm = TRUE), main = "density plot of body mass")
+```
+
+What do you notice?
+
+Conditional boxplots are great for categorical variables:
+
+```{r}
+boxplot(body_mass_g ~ species, data = penguins)
+```
+
+What do you notice?
+
+Numerical
+Remember the assumption of normality? Let’s test whether within-group data are normally-distributed. We need to do some data massaging:
+
+Extract the measurements for each species.
+Calculate the mean body mass for each species.
+Conduct Shapiro tests on each species’ body mass.
+
+```{r}
+dat_chinstrap = subset(penguins, species == "Chinstrap")
+mean(dat_chinstrap$body_mass_g, na.rm = TRUE)
+```
+
+```{r}
+shapiro.test(dat_chinstrap$body_mass_g)
+```
+
+Shapiro test null hypothesis: “The data are drawn from a normally-distributed population.”
+
+If we fail to reject the null, can we consider the data sufficiently normal to proceed?
+
+Here’s a cool shortcut for calculating the species mean body masses using aggregate() and the formula notation:
+
+```{r}
+aggregate(body_mass_g ~ species, data = penguins, FUN = mean)
+```
+
+You should try it out with the shapiro.test()!
+
+```{r}
+aggregate(
+  body_mass_g ~ species,
+  data = penguins,
+  FUN = function(x) shapiro.test(x)$p.value)
+```
+
+Fit a linear model
+The syntax is easy if you use the formula notation:
+
+```{r}
+fit_species = lm(body_mass_g ~ species, data = penguins)
+```
+
+Then we can look at the model coefficients:
+
+```{r}
+summary(fit_species)
+```
+
+Conduct the ANOVA
+
+R makes it easy to conduct an ANOVA:
+
+```{r}
+anova(fit_species)
+```
+
+## One-Way Anova Complete Walkthrough
+
+A simple Analysis of Variance belongs to the Group 1 analyses. It is a linear model!
+
+The syntax to build the model in R is easy. Use the lm() function to store the model in a variable:
+
+```{r}
+fit_species = lm(body_mass_g ~ species, data = penguins)
+```
+
+Note the use of the R formula notation.
+
+Then we can look at the model coefficients:
+```{r}
+summary(fit_species)
+```
+
+Conduct the ANOVA
+R makes it easy to conduct an ANOVA:
+
+```{r}
+anova(fit_species)
+```
+
+Two Tables: model coefficients and ANOVA
+Now remember the two model summary tables we have discussed: Model coefficient tables and ANOVA tables.
+
+Model Coefficients table
+Remember the interpretation of linear model coefficients for a categorical variable:
+
+The base case is the intercept, while the ‘slope’ coefficients are the adjustments you need to make to the base case to arrive at the other levels of the factor.
+For the penguin body mass and species model, what is the base case?
+
+Model Coefficient Table: factor-level p-values
+Next, let’s interpret the p-values for each species.
+First, note that the p-value in each row of the table is a significance test for whether the coefficient in that row is different from zero.
+Note that these p-values do not tell us whether any of the coefficients are significantly different from each other!
+
+```{r}
+summary(fit_species)
+```
+
+What can you conclude about each of the model coefficients from the p-values?
+
+
+ANOVA table: Predictor variable p-values
+We’ve interpreted the regression coefficients for our model of penguin body masses as predicted by species.
+
+Now we’ll take a look at the other common way model results are displayed, the ANOVA table.
+
+To show the Analysis of Variance results for a linear model, simply use the anova() function:
+
+
+```{r}
+anova(fit_species)
+```
+
+
+There is a lot of information in an ANOVA table:
+Degrees of freedom
+Sum of squares
+mean squares
+F statistic
+p-value
+Degrees of Freedom
+We won’t go in to detail about the degrees of freedom here, but you can think of them as representing the number of levels within in a categorical variable.
+Sum of Squares
+The sum of squares columns tell us about how much of the total data variability is explained by each of the predictor variables.
+
+
+In our case we have only 1, the species.
+
+The residuals sum of squares contains information about the variation that our model couldn’t explain.
+
+R doesn’t print a line with total sum of squares, but it is equal to the sum of all the numbers in the Sum sq. column.
+
+The total sum of squares is a measure of the total variability in the data.
+
+Mean Squares
+The Sum Sq column tells us about the variability explained by each factor, but the Mean sq column allows us to compare the relative amount of information that each factor explains.
+
+The Mean Sq column is the Sum Sq adjusted by the degrees of freedom associated with each predictor variable.
+
+Interpretation summary
+To summarize the interpretation of this model’s ANOVA table:
+
+the Sum Sq and Mean Sq columns give us information about how much variability the predictor variable is able to explain.
+
+When you have more than one predictor variable, you can think of the Mean Sq column as an estimate of the relative importance of each predictor (this will make more sense later).
+
+The Pr(>F) column gives us a rough idea of whether the predictor significantly improves the model’s prediction or not.
+
+A low p-value here (approximately) means that adding the predictor creates a significantly better model than leaving it out.
+
+Take a few minutes to look back and forth between the model coefficient and ANOVA tables for our iris_fit_1 model, making sure you understand the differences in what each is showing.
+
+## Two-Way Additive ANOVA
+
+Did you notice that the conditional boxplot of body mass and penguin species suggested that the distributions of body mass might not be the same in each species? For reference, take a look at the shape of the boxes for Chinstrap and Gentoo penguins:
+
+```{r}
+boxplot(body_mass_g ~ species, data = penguins)
+```
+
+What do you notice?
+You might have had a hunch that perhaps penguin sex is also related to body mass. We can plot another conditional boxplot, this time conditioned on two categorical variables: species and sex:
+
+After you look at this plot, do you think sex could be important?
+
+2-Way ANOVA to the rescue!
+
+Fit a 2-way, additive model.
+We’ll first fit a model with two predictors:
+
+Sex
+Species
+In this first 2-way model, we won’t include interaction terms.
+
+The syntax to fit a model with two predictors, without interaction terms, is:
+
+```{r}
+fit_additive = lm(body_mass_g ~ sex + species, data = penguins)
+```
+
+Some things to note:
+
+The formula notation
+The use of the plus symbol ‘+’ to separate the two predictors.
+
+Two-Way interactive (factorial) ANOVA
+Here’s our last ANOVA-style model.
+
+A factorial design means that all combinations of categorical variables appear as ‘groups’ in the data. We’ll use two of the penguin factor variables:
+
+sex
+species
+
+The syntax to build the model is only slightly different than that of the additive model: You just have to replace the plus symbol with a multiplication symbol to indicate an interaction (or crossing) between the two factor predictors (sex and species).
+
+You need to fill in the rest of the code yourself to complete the assignment.
+
+Make sure you tell R to fit a factorial model by using the * symbol and not the + symbol.
+When you have the model specified correctly, your model coefficient table should look like:
+
+```{r}
+fit_interactive = lm(body_mass_g ~ sex * species, data = penguins)
+ summary(fit_interactive)
+```
+
+Now you can conduct an ANOVA on your fitted model of sex and species!
+We’ll compare the ANOVA table, model coefficient table, and interactions in Using Models 3.
+
+## Simple Linear Regression: Penguin Bills and Body Mass
+
+```{r}
+
+lm(bill_length_mm ~ body_mass_g, data = penguins)
+```
+
+
+# Questions {.tabset .tabset-pills}
+
+## Q1-3 Interpreting Boxplots
+
+### Q1 (4 pts.): Re-create the conditional boxplot of penguin body mass conditioned on sex and species.
+
+Hint: Check the labels on the x-axis. Make sure you take a note of the order in which the sex/species combinations appear.
+Hint: You’ll need to tweak the labels on the x-axis. You can use the names argument.
+Hint: You can use the \n character to split your species/sex labels across two lines.
+Hint: I created the female Adelie label using the text “female”.
+
+
+```{r fit_both boxplot}
+boxplot(body_mass_g~ sex*species,
+    data = penguins,
+    main="Penguin Body Mass as Predicted by Species & Sex", ylab=" body mass (g)",   xlab = " ", 
+    names=c("female\nAdelie", "male\nAdelie", "female\nChinstrap", "male\nChinstrap", "female\nGentoo", "male\nGentoo"), las=3)
+```
+
+#### Q2 (2 pts.): Based on the boxplots, do you think male penguins (of any species) are significantly heavier than female penguins? Explain your reasoning.
+
+```{r comparing male and femal body mass}
+boxplot(
+ 
+  formula = body_mass_g ~ sex,
+    data = penguins,
+  main ="Penguin Body Mass as Predicted by Sex"
+)
+```
+
+
+**Yes,the males have an average body mass at least 1000 g more than females.**
+
+### Q3 (2 pts.): Do you think adding sex to a model that already includes species will improve the model fit?
+
+Make sure you justify your answer based on the boxplots and not results of a statistical test.
+
+**Yes,this model would improve the prediction of body mass since it accounts  the interaction of sex and species. This model illustrates the general trend that males are heavier but elucidates that there are differences in body massesbetween the sexes of each species.**
+
+## Q4-5 Model Fit 1
+
+Fit a [factorial] linear model of penguin body mass predicted by penguin sex and penguin species.
+Be sure to include the sex predictor before the species predictor.
+
+Save the output of lm() to a variable called fit_both. :::{.warn} Warning: in this case we need to fit a 2-way ANOVA model with interactions. You have to use the star symbol instead of the plus symbol to make sure that R includes all of the factor combinations.
+
+When you fit a model with two categorical predictors, the base case is now a combination of the base level of predictor one and the base level of predictor two.
+
+Use summary(fit_both) to examine the model coefficient table for a clue.
+
+### Q4 (2 pts.): Show the R-code you used to build fit_both.
+Hint: You only need one line of code to do this!
+
+```{r  model fit of penguin body mass as predicted by sex and species}
+fit_both = 
+  lm(
+    formula = body_mass_g ~ sex * species,
+    data = penguins)
+```
+
+### Q5 (2 pts.): What is the base case for the two-way model that includes sex and species?
+
+```{r}
+summary(fit_both)
+```
+
+**The base case is female Adelie body mass of  3368.84 g, a combination of the base level of sex and the base level of species.** 
+
+## Q6-8 Model Coefficients
+
+Recall that you can use the model coefficients to calculate group means when you have a model with categorical predictors.
+
+Use summary(fit_both) to examine the values of the coefficients, and their p-values, in the model coefficient table.
+
+### Q6 (2 pts.): What are the names of the two coefficients (from the first column of the coefficient table) you need to calculate the average mass of female Chinstrap penguins?
+
+**The names are "intercept" and "speciesChinstrap".** 
+
+### Q7 (2 pts.): What is the predicted average mass of female Chinstrap penguins in the interactive model?
+
+**The predicted mass of female Chinstrap penguins is 3368.84 g +  158.37 g = 3527.21 g.**
+
+### Q8 (2 pts.): What is the observed average mass of female Chinstrap penguins, calcluated from the penguins data?
+
+```{r observed average mass of female Chinstrap }
+aggregate(
+  formula = body_mass_g ~ sex * species, 
+  data = penguins,
+  FUN = mean, na.rm = TRUE)
+```
+
+Hint: You’ll need to do some logical subsetting to get the answer!
+Hint: [Optional] If you want to be fancy, you can check out the aggregate() function for an elegant approach that does not use logical subsetting.
+
+**The observed average mass of female Chinstrap penguins from the data is   3527.206 g.**

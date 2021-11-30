@@ -1,0 +1,217 @@
+---
+title: "Probability and Frequentist Concepts"
+author: "Timothy Nsubuga"
+date: "10/22/2021"
+output: 
+html_document:
+     toc: true
+     toc_float: true
+     toc_depth: 1
+     
+---
+
+# Learning Objectives
+
+ Use the distribution functions in R.
+Sampling distribution insight
+Seeing Theory
+You’ll be using the Seeing Theory site to practice help with graphical intuition of Frequentist concepts.
+
+ It’s a fantastic site, and I encourage you to check out the parts that we won’t cover in this assignment.
+
+# Distribution functions for discrete distributions
+ R implements probability, cumulative probability, and quantile functions for many parametric distributions.
+
+ The naming convention is to use the name, or an abbreviation, of the distribution preceded by a prefix. For example with the binomial distribution the functions are:
+
+ dbinom: the probability mass function
+
+ pbinom: the cumulative mass function
+
+ qbinom: the quantile function
+
+Remember that discrete distributions use the term mass rather than density.
+Remember that each distribution has different parameters, and you’ll have to look at the documentation on how to specify them with the # probability functions.
+For a discrete parametric distribution, the distribution functions allow you to ask the following questions:
+
+ What is the probability that I observe a value of exactly x?: The probability mass function, e.g. dbinom()
+ What is the probability that I observe a value of x or less?: The cumulative mass function, e.g. pbinom()
+What is the probability that I observe a value of x or more?: The cumulative mass function, e.g. pbinom()
+ What is the median or 50th percentile?: The quantile function, e.g. qbinom()
+ What is the 90th percentile?: The quantile function, e.g. qbinom()
+
+# Distribution functions for continuous distributions#
+ The naming convention is the same as for discrete distributions. For example with the normal distribution the functions are:
+
+dnorm: the probability density function
+
+pnorm: the cumulative density function
+
+qnorm: the quantile function
+
+Remember that continuous distributions use the term density rather than mass.
+Remember that each distribution has different parameters, and you’ll have to look at the documentation on how to specify them with the probability functions.
+# For a continuous parametric distribution, the distribution functions allow you to ask the following questions:
+
+ Is a value of 1.2 or 2.4 more likely? - The probability density function, e.g. dnorm()
+ What is the probability that I observe a value between 1.2 and 2.4?: The cumulative density function, e.g. pnorm()
+ What is the probability that I observe a value of 1.3 or more?: The cumulative density function, e.g. pnorm()
+ What is the probability that I observe a value of 2.4 or less?: The cumulative density function, e.g. pnorm()
+ What is the 20th percentile of fish lengths?: The quantile function, e.g. qnorm()
+
+# The law of total probability  
+ You can use R’s distribution functions to answer many probability questions, but sometimes you have to be creative and use them in combinations.
+
+ The sum of all events in the sample space is 1.0.
+
+Sometimes it’s easier to calculate the probability of the complement of an event, rather than the event’s probability directly.
+
+ Suppose you have an event E
+
+ The complement of an event Ec is just the rest of the sample space not occupied by E.
+ Pr(E)+Pr(Ec)=1.0
+
+# Questions {.tabset .tabset-pills}
+
+## Question 1
+Q1 (2 pts.): What is the probability of observing a count of exactly 3 successes 
+in a binomial distribution with parameters n = 4 and p = 0.75?
+
+Include your answer and the R code you used to find it.
+Note: To receive full credit, you cannot use lower.tail = FALSE in your code.
+
+```{r q1_dbinom()}
+dbinom(x = 3, size = 4, p = 0.75)
+```
+## Question 2
+Q2 (2 pts.): What is the probability of observing a count of 3 successes or fewer
+in a binomial distribution with parameters n = 4 and p = 0.75?
+
+Include your answer and the R code you used to find it.
+Note: To receive full credit, you cannot use lower.tail = FALSE in your code.
+
+```{r q2_pbinom}
+pbinom(q = 3, size = 4, p = 0.75)
+```
+## Question 3
+Q3 (2 pts.): What is the probability of observing more than 3 successes 
+in a binomial distribution with parameters n = 5 and p = 0.75?
+
+Include your answer and the R code you used to find it.
+Note: To receive full credit, you cannot use lower.tail = FALSE in your code.
+
+```{r q3_pbinom}
+1 - pbinom(q = 3, size = 5, p = 0.75 )
+```
+## Question 4
+Q4 (2 pts.): - What is the probability of observing a value of less than 
+1.2 from a normally-distributed population with mean = 2 and standard deviation = 2? (check this again)
+
+Include your answer and the R code you used to find it.
+Note: To receive full credit, you cannot use lower.tail = FALSE in your code.
+
+```{r q4_pnorm()}
+pnorm(q = 1.2, mean = 2, sd = 2)
+```
+## Question 5
+What is the probability of observing a value of greater than 1.2 from a normally-distributed
+population with mean = 2 and standard deviation = 2?
+
+Include your answer and the R code you used to find it.
+Note: To receive full credit, you cannot use lower.tail = FALSE in your code.
+
+```{r q5_pnorm()}
+1 - pnorm(q = 1.2, mean = 2, sd = 2)
+
+```
+
+## Question 6
+Q6 (4 pts.): - What is the probability of observing a value between 1.2 and 3.2 
+from a normally-distributed population with mean = 2 and standard deviation = 2?
+
+Include both your answer and the R code you used.
+Note: To receive full credit, you cannot use lower.tail = FALSE in your code.
+
+```{r q6_pnorm()}
+pnorm( q = 3.2, mean = 2, sd = 2) - pnorm(q = 1.2, mean = 2, sd = 2)
+```
+## Question 7
+Q7 (2 pts.): Describe how the shape of the histogram changes as you continue to press the sample button.
+
+Follow the link to the Central Limit Theorem section.
+
+Sampling Distribution
+Central Limit Theorem
+Navigate to the probability theory page on Seeing Theory.
+
+Follow the link to the Central Limit Theorem section.
+
+Sampling Distribution
+Choose a set of α and β parameters that result in a skewed beta distribution.
+Set the sample size to 1 and the draws to 50.
+Hit the sample button several times and observe the evolution of the histogram.
+
+For Questions 7 - 10 I uased alpha = 1.28 and Beta = 5
+
+As I continue to press the sample button, the histogram shape increasingly matches my skewed beta distribution 
+
+## Question 8
+Q8 (2 pts.): Describe how the shape of the histogram changes as you continue to press the sample button.
+
+Choose a set of α and β parameters that result in a skewed beta distribution.
+Set the sample size to 2 and the draws to 50.
+Hit the sample button several times and observe the evolution of the histogram
+
+As I continue to press the sample button, the histogram's tail shortens and it becomes more symmetrical 
+
+## Question 9
+Q9 (2 pts.): Describe how the shape of the histogram changes as you continue to press the sample button.
+
+Choose a set of α and β parameters that result in a skewed beta distribution.
+Set the sample size to 15 and the draws to 50.
+Hit the sample button several times and observe the evolution of the histogram.
+
+
+As I continue to press the sample button, the histogram's tail shortens and it becomes almost perfect symmetrical with 
+2 values having the highest frequency, the tails are even shorter
+
+## Question 10
+Q10 (2 pts.): Why is there such a drastic change in the shape of the sampling distribution 
+when you change the sample size from 1 to 2?
+
+Increasing the sample sample size decreases the sample standard error, a measure of how a sample mean compares to the population mean. Our approximation becomes closer as we increase the sample size from 1 to 2.
+
+## Question 11
+Q11 (2 pts.): What are the two main factors that determine the width of the sampling distribution of the mean?
+
+The sample size and standard standard error determine the width of the sampling distribution of the mean because they are used to calculate confidence 
+intervals which correlate with our uncertainly in using our sampling distribution's infer about the population.
+
+## Question 12
+There are 25 possible words consisting of a single character in the Library. There are 25×25 = 25^2 = 625 possible 2-character words.
+
+Q12 (2 pts.): How many 3-character words are possible?
+
+There are 25x25x25 =   15625 
+
+## Question 13
+Q13 (2 pts.): How many books would the Library contain if you added one additional position to the book size? Express your answer in terms of B.
+
+Given the properties of the books in the Library:
+
+410 pages
+40 rows per page
+80 positions per row
+There are 410×40×80=1,312,000 positions for characters in each book.
+
+Since there are 25 characters in the Library’s character set, there are a total of 25^1,312,000 possible books.
+
+That’s a very large number. It’s about 2×10^1,834,097. Imagine a 2 followed by almost 2 million zeroes! It certainly wouldn’t fit on Earth.
+
+That’s such a large number that it’s easier to just think of it in symbols. Let’s define the variable B as the number of books in the Library of Babel.
+
+Q13 (2 pts.): How many books would the Library contain if you added one additional position to the book size? Express your answer in terms of B.
+
+There would be B = 25^410x40x81 which is approximately infinite 
+
+

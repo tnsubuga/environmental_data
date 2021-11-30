@@ -1,0 +1,261 @@
+---
+title: "eco602_In- Class Likelihoods"
+author: "Timothy Nsubuga"
+date: "10/21/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+Learning Objectives
+Calculating likelihoods
+Estimating distribution parameters using maximum likelihood
+
+Data Files
+You’ll need bird.sta.csv and hab.sta.csv in your data subfolder.
+
+
+```{r}
+require(here)
+```
+
+
+```{r}
+read.csv(here("data", "bird.sta.csv"))
+```
+```{r}
+read.csv(here("data", "hab.sta.csv"))
+```
+
+What is likelihood?
+Likelihood is a measure of the relative probability of observing a set of one or more observations given a proposed model and parameter values.
+
+We’ll be calculating likelihoods using probability distributions and their parameter values in this activity.
+Likelihood of a single observation is proportional to the value of the probabiltiy density/mass function.
+
+Likelihood of multiple independent observations is proportional the product of individual likelihoods.
+
+
+What is maximum likelihood?
+Maximum likelihood (ML) is a criterion for selecting a model.
+
+The likelihood of a collection of observations is measured as the sum of log-likelihoods of individual observations in a dataset.
+
+ML selection procedures select the model parameter values that maximize the sum of log-likelihoods.
+
+We’ve already met another selection, least squares.
+
+
+
+Recall that in contrast to ML, in which we maximize our criterion, we minimize our criterion when we use least squares.
+
+Calculating Likelihood
+Likelihood is calculated from the probabiltiy density/mass functions.
+
+Remember the d___() functions in R?
+
+
+Likelinood of Two Observations
+Let’s practice calculating likelihoods:
+
+How can we calculate the likelihood for 2 observations?
+Recall the general procedure for calculating likelihoods:
+Propose a model or distribution.
+Propose a set of model or distribution parameter values.
+Calculate the likelihood for each observation.
+Multiply the individual likelihoods to get the joint likelihood.
+In practice, you calculate the sum of the log-likelihoods.
+Here’s an example in R:
+
+Let’s say I’ve been conducting counts of Wilson’s Warblers at study sites in Oregon.
+I’ve been to 2 sites where I counted 2, and 6 birds.
+
+```{r}
+x_observed = c(2, 6)
+print(x_observed)
+```
+
+I think I can model the population of birds at the study sites with a Poisson distribution.
+
+I know that the Poisson distribution has a single parameter: λ.
+I also know that the mean and standard deviation of a Poisson distribution are equal to λ
+Choosing a model:
+
+I think the count of 2 is unusually low, so I decide to propose a Poisson distribution with λ=4.5 as a model of the counts of Wilson’s Warblers on my study sites.
+
+I can use dpois() to calculate the probability mass for the two counts given a Poisson distribution with λ=4.5
+
+```{r}
+dpois(x = 2, lambda = 4.5)
+```
+
+```{r}
+dpois(x = 6, lambda = 4.5)
+```
+
+I know the likelihood of observing those particular counts together is the product of the individual likelihoods:
+
+```{r}
+dpois(x = 2, lambda = 4.5) * dpois(x = 6, lambda = 4.5)
+```
+
+I can take advantage of vectorization in R by storing the counts in a single vector:
+
+```{r}
+wiwa_counts = c(2, 6)
+dpois(x = wiwa_counts, lambda = 4.5)
+```
+
+Product of Likelihoods
+I can more easily calculate the product now:
+
+```{r}
+prod(dpois(x = wiwa_counts, lambda = 4.5))
+```
+
+Sum of Log-Likelihoods
+And the sum of log-likelihoods like:
+
+```{r}
+sum(log(dpois(x = wiwa_counts, lambda = 4.5)))
+```
+
+Likelihood of Many Observations
+Now let’s say I want to find the value of that maximizes the likelihood for the counts of Wilson’s Warblers.
+
+I first need to load the bird data:
+
+```{r}
+dat_bird = read.csv(here::here("data", "bird.sta.csv"))
+dat_habitat = read.csv(here::here("data", "hab.sta.csv"))
+dat_all = merge(dat_bird, dat_habitat)
+```
+
+Numerical Data Exploration
+Next I need to do some numerical and graphical data exploration.
+
+I’ll start with a 5-number summary, and then plot a histogram.
+
+The summary:
+
+```{r}
+summary(dat_all$WIWA)
+```
+
+Graphical Exploration: Histograms
+Default histogram
+Next, we’ll plot a histogram of census counts.
+
+Here’s the histogram that R produces with default settings:
+
+
+```{r}
+hist(dat_all$WIWA)
+```
+
+
+It’s not a pretty histogram.
+
+Histogram with custom breaks
+Let’s try setting the breaks argument to 7. This will suggest to R that it should create 7 bins (corresponding to observations between 0 and 7 wrens):
+
+```{r}
+hist(dat_all$WIWA, breaks = 7)
+```
+
+NOTE: if you look closely, this histogram includes both the observations of zero and one in the first bin. We requested 7 bins, but it only plotted 6!
+
+When you use a single number for the breaks argument, R interprets it as a suggestion, but it’s binning algorithm may decide to use a different number!
+
+Histogram with custom breaks attempt 2
+One more try: we need to un-group the zero and one counts so that we see them as distinct bars in the histogram. We used a single number for the breaks argument to tell to try to automatically figure out how to divide the counts into 7 bins.
+
+You can use a vector for the breaks argument. R attempts to estimate bin breakpoints when breaks is a single number, but it will honor your input if you provide a vector of breakpoints:
+
+
+```{r}
+hist(dat_all$WIWA, breaks = 0:7)
+
+```
+
+Still not exactly what we want. It turns out that for the first bin, R includes both endpoints in its count. In this case it’s counting all of the 0- and 1-observations together.
+
+Histogram with custom breaks attempt 3: success!
+We can trick R into only counting the lower endpoint if we cleverly manipulate the sequence that we give to bins.
+
+```{r}
+0:7 - 0.5
+```
+
+If we write code that subtracts a single value (a scalar in linear algebra lingo) from a vector, R will subtract the number from each element in the vector and return the output.
+
+```{r}
+hist(dat_all$WIWA, breaks = 0:7 - .5)
+```
+
+This works because the data were discrete counts. It also looks nicer because the bars are now centered over the census counts.
+
+This trick doesn’t work as well for continuous data.
+Histograms with (discrete) count data
+If we wanted to use code like this with data for which we didn’t know the maximum value ahead of time we could write:
+
+
+```{r}
+par(mfrow = c(1, 2))
+dat = dat_all$WIWA
+hist(dat, breaks = 0:(max(dat) + 1) - 0.5, main = "Histogram of\nWilson's Warbler counts")
+
+dat = dat_all$GRJA
+hist(dat, breaks = 0:(max(dat) + 1) - 0.5, main = "Histogram of\nGray Jay counts")
+```
+
+```{r}
+sum(log(dpois(x = dat_all$WIWA, lambda = 1.0)))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+Questions 
+
+Q1: As a group, experiment with different values of λ to find a value that maximizes the sum of log-likelihoods of the hypothetical observations.
+Hint: you only need to consider 3 decimal digits!
+
+```{r}
+wiwa_counts = c(2, 6)
+dpois(x = wiwa_counts, lambda = 4)
+sum(log(dpois(x = wiwa_counts, lambda = 4)))
+```
+
+In the walkthrough, I tried using a Poisson distribution with λ=1.0 to model the set of census counts of Wilson’s Warbler.
+
+You will create models for the census count of Winter Wrens.
+
+Q2: Find the λ value of a Poisson model that makes all of the observed the Winter Wren’s census counts most likely.
+
+Plot a histogram of Winter Wren counts (Check the metadata file to find the abbreviation for Winter Wrens). Make sure you choose an appropriate number of bins for the plot.
+
+As a group, you’ll be searching for the value of λ that maximizes the sum of log-likelihood. In other words, you’ll find the the model parameter that makes the values of observed wren census counts most likely.
+
+Hint: you only need to consider 2 decimal places in your value of λ.
+Include your histogram into your report.
+What value for λ did you select?
+Show the R code you used to calculate the Poisson log-likelihood for the vector of Winter Wren census counts.
+
+```{r}
+ sum(log(dpois(x = dat_all$WIWR, lambda = 1.5))) 
+
+```
+
+```{r}
+hist(dat_all$WIWR,  breaks = 0:7 - .5)
+```
+

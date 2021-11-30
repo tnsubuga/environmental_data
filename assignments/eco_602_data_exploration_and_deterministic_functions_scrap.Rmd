@@ -1,0 +1,120 @@
+---
+title: "Untitled"
+author: "Timothy Nsubuga"
+date: "9/23/2021"
+output: word_document
+---
+#par(mfrow = c(3, 1))
+plot( x = dat_habitat$elev, y = dat_habitat$ba.tot, main = "Total Basal Area Per Elevation", 
+      xlab = "Elevevation (m)", ylab = "Total Basal Area (m2 per ha)")
+
+#Find the center of the first plot here
+data_center_x <- mean(dat_habitat$elev)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+#Add a red point at the center of the existing plot
+points(x = data_center_x , y = data_center_y , col = "red")
+
+#calculate the coordinates of points on a line 
+#given the x- and y- coordinates of a known point and a slope
+
+#the four arguments to line_point_slope() are:
+#the x-value for which to calculate the y-value output
+#the x-coordinate of the known point along the line.
+#the y-coordinate of the known point along the line.
+#the slope of the line.
+line_point_slope <-  function(x, x1, y1, slope)
+{
+  get_y_intercept <- 
+    function(x1, y1, slope)
+      return(-(x1*slope)+ y1)
+  
+  linear <- 
+    function(x1, yint, slope)
+      return(yint + x*slope)
+  
+  return(linear(x,get_y_intercept(x1,y1,slope), slope))
+}
+
+
+#Use curve() to add a line or other curve to the existing plot
+curve(
+  line_point_slope(
+    x, 
+    data_center_x, 
+   data_center_y ,
+  2
+  ), 
+  add = TRUE)
+
+
+
+
+plot(x = dat_habitat$slope, y = dat_habitat$ba.tot, main = "Total Basal Area Per Slope",
+     xlab = "Slope (%)", ylab = "Total Basal Area (m2 per ha)")
+
+#Find the center of the second plot here
+data_center_x <- mean(dat_habitat$slope)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+#Add a red point at the center of the existing plot
+points(x = data_center_x , y = data_center_y , col = "blue")
+
+#calculate the coordinates of points on a line 
+#given the x- and y- coordinates of a known point and a slope
+
+#Use curve() to add a line or other curve to the existing plot
+curve(
+  line_point_slope(
+    x, 
+    10, 
+   115 ,
+  2
+  ), 
+  add = TRUE)
+
+plot(x = dat_habitat$aspect, y = dat_habitat$ba.tot,  main = "Total Basal Area Per Slope",
+     xlab = "Aspect (degrees)", ylab = "Total Basal Area (m2 per ha)")
+
+#Find the center of the third plot here
+data_center_x <- mean(dat_habitat$aspect)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+#Add a red point at the center of the existing plot
+points(x = data_center_x , y = data_center_y , col = "green")
+
+#calculate the coordinates of points on a line 
+#given the x- and y- coordinates of a known point and a slope
+
+#the four arguments to line_point_slope() are:
+#the x-value for which to calculate the y-value output
+#the x-coordinate of the known point along the line.
+#the y-coordinate of the known point along the line.
+#the slope of the line.
+line_point_slope <-  function(x, x1, y1, slope)
+{
+  get_y_intercept <- 
+    function(x1, y1, slope)
+      return(-(x1*slope)+ y1)
+  
+  linear <- 
+    function(x1, yint, slope)
+      return(yint + x*slope)
+  
+  return(linear(x,get_y_intercept(x1,y1,slope), slope))
+}
+
+#plot(x = iris$Sepal.Width, y = iris$Sepal.Length)
+#Use curve() to add a line or other curve to the existing plot
+curve(
+  line_point_slope(
+    x, 
+    10, 
+   115 ,
+  2
+  ), 
+  add = TRUE)
+

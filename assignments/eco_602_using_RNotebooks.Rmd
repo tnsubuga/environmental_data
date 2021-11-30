@@ -1,0 +1,23 @@
+---
+title: "R Markdown Documents - Part 1"
+author: "Timothy Nsubuga"
+subtitle: "Analysis of Environmental Data"
+output:
+   html_document:
+     toc: true
+     toc_float: true
+     toc_depth: 1
+---
+# Introduction 
+Hello, my name is **Timothy Nsubuga** and I am a first-year MS/PhD student in the *Environmental and Water Resources Engineering* program.  
+
+# Concepts List 
+1. Basic R 
+1. Hypothesis-Testing
+1. Frequently used analyses
+1. Assess appropriate types of analyses 
+
+# Course List 
+* Introduction to Physics 1
+* Watershed Hydrology
+* Geomorphology 

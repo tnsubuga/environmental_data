@@ -1,0 +1,466 @@
+---
+title: "Using Models 1"
+author: "Timothy Nsubuga"
+date: "11/7/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+## Learning Objectives
+
+### Conduct commonly used tests on categorical data
+
+## Key Concepts
+
+### Analysis of categorical data: 1- and 2-sample tests
+### Testing assumptions: normality
+## Interpreting test output
+
+# Walkthrough {.tabset .tabset-pills}
+
+## Introduction
+
+## Marbled Salamanders and Catastrophe Rate Data
+
+## Marbled Salamanders
+The data represent the observed reproductive success of marbled salamanders in 13 vernal pools over a period of 7 years in western Massachusetts.
+
+For additional info, check out the Marbled Salamader Conservation Plan for Massachusetts.
+
+## Late Filling
+
+From ncwildlife.org:
+
+“Instead of breeding in water during spring like other mole salamanders, the marbled salamander breeds in the fall on land. Females lay their eggs in a variety of dried-up ponds, pools or ditches that have not yet filled with winter rains. Nests are usually laid under leaf litter, logs or other debris within the depression basin, and are guarded by the female until the eggs are covered with water. Clutch size ranges from 50-200 eggs. While in the nest, embryos will develop within their jelly coats, but they cannot hatch until the area fills with water. If there is not enough rain to fill these wetlands in the fall, the eggs will sometimes overwinter and hatch in the spring instead.”
+
+During years in which the ponds fill later than normal, the eggs are at risk of freezing or dessication.
+
+## Catastrope Rate
+
+Catastrophe rate (cat.rate) is the proportion of years with any breeding effort (i.e., >0 breeding females) in which the number of emerging juveniles per breeding female (i.e., fecundity) was less than 1, a level that Kevin McGarigal and his collaborators deemed to be a reproductive “catastrophe”
+
+Find the data file catrate.csv on the course GitHub page and save it in the data subdirectory of your main course RProject folder.
+
+Use read.csv() and here() to load the data into a data.frame called catrate. Examine the first few rows using head():
+
+```{r load catrate data}
+require(here)
+
+catrate = read.csv(here('data','catrate.csv'))
+
+head(catrate)
+```
+
+## Numerical and Graphical exploration
+
+Use the summary() function to view numerical summaries of all the columns in catrate.
+
+```{r numerical summaries of data}
+summary(catrate)
+```
+
+Plot a histogram of the catastrophic rates (column cat.rate).
+
+```{r hist of cat.rates}
+hist(catrate$cat.rate, main = 'Histogram of Catastrophe Rates', xlab = 'Catastrophe Rate')
+```
+
+## Shapiro Test
+
+One of the most common is the Shapiro-Wilk test, implemented in R as shapiro.test().
+
+Try running the shapiro.test() function on the cat.rate column of the catrate data.
+How can you extract just the cat.rate column?
+You’ll need to figure out the shapiro.text() syntax.
+
+Once you get it right, your output should look like:
+
+```{r use just cat.rate}
+cat_dat = catrate$cat.rate
+```
+
+
+```{r sahpiro test }
+shapiro.test(cat_dat)
+```
+
+The R help entry for shapro.test() doesn’t provide much information about how to interpret the output.
+
+The null hypothesis for the Shapiro-Wilk test is: “The data were sampled from a normally-distributed population”.
+
+Recall that low p-values suggest that there is good evidence against the null hypothesis.
+
+How would you interpret the output of the Shapiro test? Is there strong evidence that the cat.rate is non-normal?
+
+**Based on the Shapiro test  we can reject the null hypothesis that the data were sampled from a normally-distributed population, there is strong evidence that the cat.rate is non-normal.**
+
+## Other Normality Tests
+
+The package nortest contains many other functions for assessing normality including ad.test(), lillie.test(), and many others.
+
+## One-Sample Tests: Tests for Difference From Expectation
+
+One of the simplest one-sample tests is whether the observed mean (or median) is significantly different from a specified value
+
+The default null hypothesis is that the mean is equal to zero, but this is not a very meaningful null hypothesis in many cases. For example, if we wanted to
+
+In two of the seven years, vernal pools filled later than normal in the fall.
+
+Late pond-filling can cause the desiccation and/or freezing of the eggs prior to inundation, resulting in death.
+The observed late-filling rate is 27≈0.28.
+The observed mean catastrophic rate from the data is 0.54. How could you calculate this?
+We might want to test the alternative hypothesis that the observed mean cat.rate (0.54) is significantly different from an expected value of 0.28.
+
+Under this causal model, 2 of the 7 (2/7=0.28) years of the study between 1999-2005 experienced late pond filling.
+
+Is the mean observed catastrophe rate significantly different from expected (if we assume reproductive catastrophe is caused only by late-filling)?
+
+## Parametric One-Sample Test: The t-test
+
+If the data are normally distributed, we can use the Student’s t test.
+
+The function in R is t.test().
+
+Recall that for a one-sample test, the null hypothesis is: “The mean of population from which the data were collected is not different from x”
+
+The default null hypothesis has x=0, but we have a good reason to choose a different value for the null.
+
+You need to use t.test() to perform a 1-sample test on the catastrophic rate.
+
+The t.test() arguments you need to use for this test are x and mu.
+
+mu is the null hypothesis you want to test against. What value should you use for mu in your t.test() call?
+Once you have the correct R syntax, you should see t-test output that looks like:
+```{r alt. hype tested }
+t.test(catrate$cat.rate, mu = 0.2857143)
+```
+
+What does the Student’s t test say about the probability that the observed catastrophe rate comes from a population in which catastrophes are solely the result of late pond-filling in the fall? Note, the default t test is a two-sided alternative; i.e., the alternative hypothesis is that the observed mean is not equal to the expected mean, which can mean less than or greater than the expected mean
+
+## One-sided Alternative Hypothesis
+
+If we have a good reason to believe that the observed mean should be greater than the null hypothesis mean, you can use a one-tailed test.
+
+NOTE: we saw that the observed catastrophic rate was greater than the late-filling rate. Since we didn’t state that we thought the observed rate would be greater than the late-filling rate before we looked at the data it is not valid to retroactively specify a 1-tailed alternative hypothesis.
+In the case that you propose a one-tailed hypothesis before looking at the data you can conduct a one-sided test by including the argument alternative = "greater" in the call to t.test()
+
+For a 1-sided t-test on the catastrophic rate you should obtain results similar to:
+
+```{r 1-sided test(greater)}
+t.test(catrate$cat.rate, alternative = "greater", mu = 0.2857143)
+```
+
+If we proposed a one-tailed hypothesis that the observed data would be less than the null hypothesis, we could use alternative = "less"
+
+What p-value do you observe when you conduct the t-test on the catastrophic rate using alternative = "less"?
+
+
+```{r 1-sided test(less)}
+t.test(catrate$cat.rate, alternative = "less", mu = 0.2857143)
+```
+
+## Non-Parametric One-Sample Test: The Wilcoxon Rank Sum Test
+
+In the case of small samples from a non-normal distribution, we can use the Wilcoxon’s signed rank test (also known as the Mann-Whitney test). The syntax is almost exactly the same as the t.test() syntax. You can use the same value for mu.
+
+```{r wilcoxon test}
+wilcox.test(catrate$cat.rate, mu = 2 / 7)
+```
+
+The syntax for conducting a 1-tailed test is exacly the same as for the t.test(): use alternative = "less" or alternative = "greater"
+
+## Comparing two sample means
+
+In the one-sample tests, we compared a sample mean with a fixed value that we specified.
+
+If you need to compare the means of two groups of observations, you can use a two-sample test.
+
+The null hypothesis in a two-sample test is: “There is no difference in mean values between the two groups.”
+
+Alternatively:
+
+The values in the two groups were drawn from the same population.
+
+We’ll use the penguin data for our 2-sample tests. We’ll exclude the Gentoo penguins so that we only have two penguin species.
+
+You can copy this code directly into your assignment script:
+
+```{r only gentoo}
+require(palmerpenguins)
+penguin_dat = droplevels(subset(penguins, species != "Gentoo"))
+```
+
+## Numerical/Graphical Exploration
+
+Use summary() to summarize the columns in the data:
+
+```{r summary of penguin data}
+summary(penguin_dat)
+```
+
+For this example we’ll consider the flipper length, in mm.
+
+Let’s visualize the data using a conditional box plot, as follows:
+
+```{r flipper length boxplot}
+boxplot(
+  flipper_length_mm ~ species, 
+  data = penguin_dat,
+  ylab = "Flipper Length (mm)")
+```
+
+Note that I used the formula notation: flipper_length_mm ~ species along with the data argument.
+
+Testing for normality
+I’ll let you use shapiro.test() on your own to determine whether the flipper lengths are normally-distributed, but I’ll give you a couple of hints:
+
+You’ll need to compare the flipper lengths for each species separately. You can use subset() to extract the flipper measurements for individual species as follows:
+
+```{r extract flipper measurements for individuals species}
+# Extract the Adelie penguin data
+#dat_adelie = subset(penguin_dat, species == "Adelie")
+```
+
+
+Then you can use the normality test on the flipper length column of dat_adelie. You can use a similar syntax to test the Chinstrap penguins.
+If you’re feeling fancy, you can try to use the aggregate() function to conduct the species-specific tests instead of creating separate data sets for each species.
+
+
+```{r extract flipper measurements for individuals species again}
+# Extract the Adelie penguin data
+dat_adelie = subset(penguin_dat, species == "Adelie")
+dat_chin = subset(penguin_dat, species == "Chinstrap")
+```
+
+```{r shapiro tests for each species }
+
+shapiro.test(dat_adelie$flipper_length_mm)
+
+shapiro.test(dat_chin$flipper_length_mm)
+```
+
+### Parametric and Nonparametric Tests
+Again, you can use the t-test!
+
+This time the syntax is slightly different because you have two samples, or groups.
+You can use exactly the same formula notation syntax that I used for the boxplot above.
+
+When you have your t.test() function call set up correctly, you should see something like:
+
+```{r t-test on each species fipper length}
+t.test(flipper_length_mm ~ species, dat = penguin_dat)
+```
+
+The Wilcoxon rank test works with exactly the same syntax. I’ll leave it up to you to conduct the test using wilcox.test()
+
+You can test 1-tailed hypotheses in the two-sample tests as described above for the one-sample tests.
+
+The trick is that you have to figure out which group R considers to be the the ‘base level’.
+We won’t try it in this assignment, but you can use levels() to find out which is the base level:
+
+```{r 1-tailed hypothesis with two-sample test}
+
+#not attempting here
+#levels(penguin_dat$species)
+## [1] "Adelie"    "Chinstrap"
+```
+
+It looks like Adelie is the base level!
+
+
+
+# Questions {.tabset .tabset-pills}
+
+## Q1 Catastrophe Rate Histogram
+
+### Q1 (1 pt.): Create a histogram of the salamander reproduction catastrophic rates.
+### Make sure you include an appropriate title and label for the x-axis.
+
+```{r hist of cat.rates again}
+hist(catrate$cat.rate, main = 'Histogram of Catastrophe Rates', xlab = 'Catastrophe Rate')
+```
+
+## Q2-4 Normality Test
+
+### Q2 (1 pt.): Conduct a Shapiro-Wilk test of normality of the salamander catastrophic rates. Report the p-value and show the R-code you used to conduct the test.
+
+
+```{r sahpiro test again}
+shapiro.test(cat_dat)
+```
+
+**The p-value is 0.041.**
+
+### Q3 (1 pt.): What is the null hypothesis for the Shapiro test?
+
+**The null hypothesis for the Shapiro test is that the data are sampled from a normally-distributed population.**
+
+### Q4 (1 pt.): Based on the Shapiro test results, is there strong evidence that the sample came from a non-normally-distributed population
+
+**There is strong evidence that the sample came from a non-normally-distributed population.**
+
+**Based on the Shapiro test  we can reject the null hypothesis that the data were sampled from a normally-distributed population, there is strong evidence that the cat.rate is non-normal since the p-value is less than 0.05.**
+
+## Q5-7 T Test 1
+
+Conduct a one-sample t-test of the alternative hypothesis that the catastrophic rate is different from the pond late-filling rate.
+
+Review the assignment walkthrough if needed.
+
+### Q5 (1 pt.): Show the code you used to conduct the t-test.
+
+```{r alt. hype tested again}
+t.test(catrate$cat.rate, mu = 0.2857143)
+```
+
+Hint: your answer should only be a single line of code.
+
+### Q6 (1 pt.): State the null hypothesis of the test, in plain nontechnical English.
+
+**The null hypothesis is that the observed mean catastrophic rate (0.54) is not significantly different from an expected value of 0.2857143,the late-filling rate, meaning we do not expect the observed mean catastrophic  to be different from 0.2857143.**
+
+
+### Q7 (1 pt.): Is this a one- or two-tailed test?
+
+**This is a two-tailed t-test because we are not concerned with a directional comparison between the  catastrophic rate and the pond late-filling rate.**
+
+## Q8-10
+
+Interpret the results of your one-sample t-test of the alternative hypothesis that the catastrophic rate is different from the pond late-filling rate.
+
+### Q8 (2 pts.): What is the p-value from your t-test? Interpret the p-value as a false-positive rate using nontechnical English that a non-scientist would understand.
+
+**The p-value is 0.012 which means that if the null hypothesis that the catastrophic is not different from the late-filling rate, 0.2857143 then we would observe a catastrophic rate of 0.54 about 1.2% of the time.**
+
+**However, using 1-tailed tests for directional comparison with alternative hypotheses of mean catastrophic rate being greater than and then less than 0.2857143, yields different p-values:**
+```{r 1-sided test(greater) again}
+t.test(catrate$cat.rate, alternative = "greater", mu = 0.2857143)
+```
+
+```{r 1-sided test(less) again}
+t.test(catrate$cat.rate, alternative = "less", mu = 0.2857143)
+```
+
+
+
+
+### Q9 (1 pt.): What is the confidence interval for the difference between the null hypothesis and alternative hypothesis means? Did it include zero?
+
+**The 95% CI is [0.3526250, 0.7261295] which does not include zero.**
+
+### Q10 (2 pts.): Considering the results from your t-test, did you conclude that there was strong evidence to reject the null hypothesis?
+
+**Since the p-value for the two-tailed test is 0.012 which is less 0.05, there is strong evidence to reject the null hypothesis.**
+
+Make sure you justify your answer using the output of the t-test.
+
+## Q11-13 Wilcoxon Test 1
+
+Conduct a one-sample Wilcoxon rank sum test of the alternative hypothesis that the catastrophic rate is different from the pond late-filling rate.
+
+Review the assignment walkthrough if needed.
+Interpret the results of your one-sample Wilcoxon rank sum test of the alternative hypothesis that the catastrophic rate is different from the pond late-filling rate.
+
+### Q11 (1 pt.): Show the code you used to conduct the test.
+```{r wilcoxon test again}
+wilcox.test(catrate$cat.rate, mu = 2 / 7)
+```
+
+Hint: your answer should only be a single line of code.
+
+### Q12 (1 pt.): Compare the p-value with the p-value you got from the t-test.
+
+**The p-value from the Wilcoxon test is  p-value = 0.006275 wchich is less than the p-value from the t-test, 0.01193. 
+
+### Q13 (2 pts.): Considering the results from your rank sum test, did you conclude that there was strong evidence to reject the null hypothesis?
+
+**Considering a p-value of  0.006275 which is less than 0.05, there is strong evidence to reject the null hypothesis.**
+
+Consider the one-sample t-test and Wilcoxon rank sum tests that you performed on the catastrophic rate data. Explain your reasoning.
+
+## Q14-15 Test Comparison 
+
+### Q14 (1 pt.): Compare the overall conclusions you could draw from the results of the two tests.
+
+**The t-test and Wilcoxon test both produce p-values less than 0.05 and therefore agree that the observed catastrophe rates do not  come from a population in which catastrophes are solely the result of late pond-filling in the fall.**
+
+### Q15 (1 pt.): Considering the numerical and graphical data exploration, which test do you think was more appropriate for these data?
+
+**The Wilcoxon test is used for small smalples from a non-normal distribution and the t-test is used for samples from a normally-distributed population. Considering that the data are not from a normally-distributed population, the Wilcoxon test is more appropriate.**
+
+Make sure you justify your answer using the output of the test.
+
+## Q16-17 Flippers-Normality Tests
+
+### Q16 (2 pts.): Show the R-code you used to conduct tests of normality for the flipper lengths of Chinstrap and Adelie penguins.
+
+
+```{r extract flipper measurements for individuals species again, again}
+# Extract the Adelie penguin data
+dat_adelie = subset(penguin_dat, species == "Adelie")
+dat_chin = subset(penguin_dat, species == "Chinstrap")
+```
+
+```{r shapiro tests for each species again}
+
+shapiro.test(dat_adelie$flipper_length_mm)
+
+shapiro.test(dat_chin$flipper_length_mm)
+```
+
+
+#### Q17 (2 pts.): Interpret the test results. Do you conclude that the flipper lengths are normally-distributed for each species? Make sure your answers make reference to the test output.
+
+**The p-values for the flipper lengths of Adelie and Chinstrap penguins using the Shapiro test are 0.72 and 0.8106, both above 0.05 which means we fail to reject the null hypothesis that they are normally distributed. They are therefore normally distributed.**
+
+## Q18 Flippers-Histograms
+
+### Q18 (2 pts.): Save your figure to a file and include it in your report. Your figure needs to have appropriate dimensions such that the two histograms are not vertically stretched.
+
+Hint: Check out the width and height arguments.
+
+Hint: Remember the par() function? Which argument did we use to include multiple plots in the same figure?
+
+Create a single figure consisting of histograms of flipper lengths of Adelie and Chinstrap penguins.
+
+Your figure should have two histograms arranged in one row.
+
+```{r create and save histograms of flipper length for each species in pdf}
+
+png(
+  filename = here("assignments", "flipper_histogram_species.png"),
+  width = 1500,
+  height = 750,
+  res = 180)
+
+par(mfrow = c(1, 2))
+
+hist(dat_adelie$flipper_length_mm, 
+     main = "Histogram of Adelie Penguin \nFlipper Lengths", 
+     xlab = 'Flipper Length (mm)', col = 'red')
+
+hist(dat_chin$flipper_length_mm, 
+     main = "Histogram of Chinstrap Penguin \nFlipper Lengths",
+     xlab = 'Flipper Length (mm)', col = 'blue')
+
+dev.off()
+```
+
+## Q19-20 Flippers T-test
+
+Conduct a two-sample t-test of the alternative hypothesis that the Adelie penguins have different flipper lengths than Chinstrap penguins.
+
+### Q19 (2 pts.): State the alternative hypothesis of the test, in plain nontechnical English.
+Consider whether you used a one- or two- tailed test.
+
+**The true difference in mean flipper length between the Adelie and Chinstrap Penguins is not zero, there is a difference in this two-tailed non-directional test.**
+
+### Q20 (1 pt.): Include the code you used to conduct the t-test.
+
+Hint: your answer should only be a single line of code.
+
+
+```{r t-test on each species fipper length again}
+t.test(flipper_length_mm ~ species, dat = penguin_dat)
+```
+

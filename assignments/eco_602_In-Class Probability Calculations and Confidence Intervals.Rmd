@@ -1,0 +1,47 @@
+---
+title: "In-Class Probability Calculations and Confidence Intervals"
+author: "Timothy Nsubuga"
+date: "10/14/2021"
+output: html_document
+---
+
+
+Question 1: Binomial parameters
+If I wanted to use a binomial distribution to model my six forest plots, what values should I use for the two parameters of a binomial distribution?
+
+n = 6 and p = 2/3 
+
+```{r}
+dbinom(x = 4, size = 6, p = 2/3)
+```
+Question 2: Binomial probability 1
+Use dbinom to calculate the probability of observing birds in exactly four of the six patches. Include your R-code in your answer.
+
+```{r}
+dbinom(x = 4, size = 6, p = 2/3)
+```
+Question 3: Binomial probability 2
+Now, suppose I did a survey and observed no birds in my plots. Use dbinom to calculate the probability of observing no presences.
+
+```{r}
+dbinom(x = 0, size = 6, p = 2/3)
+```
+
+Question 4: Binomial Probabilities 3
+Back to the binomial scenario (bird presence/absence in 6 forest plots).
+
+Now use pbinom to calculate the probability of observing four or fewer presences in the 6 plots. Show your R code.
+
+```{r}
+pbinom( q = 4, size = 6, p = 2/3)
+```
+
+Question 5: Binomial Probabilities 4
+Now use pbinom and the law of total probability to calculate the probability of observing four or more presences in the 6 plots. Show your R code
+
+#pbinom(3,6,2/3) gives us the probability of 3 or fewer presences, 1 - this prob. gives us the probability of 4 or more presences 
+```{r}
+1 - pbinom(3,6,2/3)
+```
+#dfunctions are probability density at x
+#pfunctions are cumulative probability to the left of x

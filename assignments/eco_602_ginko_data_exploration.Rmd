@@ -1,0 +1,60 @@
+---
+title: "In-Class Ginkgo Data Exploration"
+author: "Timothy Nsubuga"
+date: "11/23/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## Objectives
+
+Import ginkgo data
+
+perform basic graphical exploration
+
+## Instructions
+
+Retrieve the ginkgo data 2021 file and read it into a data.frame object.
+
+```{r get ginko data}
+require(here)
+gink_dat = read.csv(here('data','ginkgo_data_2021.csv'))
+```
+
+
+
+## Questions
+
+### Q1 (1 pt.): Create a conditional boxplot of one of the continuous variables (notch) conditioned on the seeds_present column.
+```{r boxplot of noth conditnoin on the seeds presents}
+boxplot(notch_depth ~ seeds_present,
+        data = gink_dat)
+```
+
+
+### Q2 (1 pt.): Based on your boxplot, do you think there is any difference betwen seed bearing and non seed bearing trees? Note: this is just a prelimnary data exploration, you may change your mind based on further analysis!
+
+No.
+
+### Q3 (1 pt.): Create a scatterplot of max leaf depth (x) and max leaf width (y).
+```{r}
+plot(x = gink_dat$max_depth,
+     y = gink_dat$max_width, 
+     main = "Relationship between Ginkgo Leaf Depth and Width ",
+     xlab = "max leaf depth",
+     ylab = "max leaf width")
+```
+
+
+### Q4 (1 pt.): Qualitatively describe the patterns you see in the scatterplot.
+
+The majority of leaf samples collected had a max leaf deoth between 40-60 max leaf depth.
+
+### Q5 (1 pt.): Explain how our data collection procedure might have violated the fixed x assumption.
+
+We could have accidentally collected leaves from a tree that was not the assigned ID, but rather a neighboring tree.
+
+### Q6 (1 pt.): Name 1 or more concepts you’d like me to review or discuss in more detail during our last two class meetings.
+
+It would be interesting to have an introduction to Bayesian statistics and to know if it is possible to use this framework in all the model types we have reviewed.  

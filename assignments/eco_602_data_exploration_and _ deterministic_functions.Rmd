@@ -1,0 +1,227 @@
+---
+title: "Data Exploration and Deterministic Functions"
+author: "Timothy Nsubuga"
+date: "9/18/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+#Use here() and read.csv() to read hab.sta.csv into a data.frame called dat_habitat
+```{r}
+require(here)
+```
+
+```{r}
+dat_habitat <- read.csv(here("data", "hab.sta.csv"))
+```
+1. Create histograms for the three terrain variables: elevation, slope, and 
+aspect and create a figure with three panels arranged in a single column. You 
+maynotice some pacularities with the rightmost bin in the aspect histogram. Consider the units in which aspect is measured and check out the breaks argument for hist().
+```{r}
+par(mfrow = c(3, 1))
+hist(dat_habitat$elev,
+     main = "Histogram of Bird Census Sampling site Elevation",xlab = "Elevation (m)")
+hist(dat_habitat$slope, 
+     main = "Histogram of Bird Census Sampling site Slope",xlab = "Slope (%)")
+hist(dat_habitat$aspect, 
+     main = "Histogram of Bird Census Sampling site Aspect",xlab = "Aspect (degrees)", breaks = c(0,30,60,90,120, 150,180,210,240,270,300, 330,360))
+```
+
+2. Consider the distribution of elevations at the bird census sample sites.
+
+Interpret the shape of the elevation histogram in non-technical language that a non-scientist audience would understand. 
+
+Some points to consider:
+Are there more high- or low-elevation sampling sites?
+Is there an even distribution of sampling site elevation?
+
+The distribution of elevations at the bird census sample sites contains more low  elevation sampling sites than high elevation sampling sites. The majority of the sampling sites are located between 200-450m. This is indicated by the higher frequencies in this range. In addition, this distribution is right-skewed due to the long "right tail" from 450-800m. This in turn means that there is not an 
+even distribution of the sampling sites. One could expect this distribution to have a mean greater than its median which would be greater than its mode.
+
+3. What are the units of slope in this data set?
+
+The units of slope in this data set are percent slope (%) according to the metadata which ranges from 0 - 110.
+
+4. Consider the distribution of slopes at the bird census sample sites.
+
+Interpret the shape of the slope histogram in non-technical language that a non-scientist audience would understand. Some points to consider:
+Are most sample sites flat?
+Is there an even mixture of steep and shallow slopes?
+```{r}
+hist(dat_habitat$slope, main = "Histogram of Bird Census Sampling Site Slope", xlab = "Slope (%)")
+
+```
+In the distribution of slopes at the bird census sample sites, most sites are 
+not flat or not extremely steep as most of them based on the frequencies illustrated are between 40-70 degrees and 100% slope being 45 degrees. Furthermore, there is not an even mixture of steep and shallow slopes. There is however, a lack of symmetry in this distribution.  Between slopes of 10-20%, 20-30%, and 30-40%, there is a steady increase of about 25 sites. Slopes between 40-70% contain roughly the same number of sites at above 150 sites. 
+There is then an inconsistent decrease in the number of sites between slopes of 70-110%.
+
+5. Briefly define aspect, describing the units used in this dataset. 
+
+Aspect is defined as the direction of the slope measured clockwise in degrees from 0 to 360, where 0 faces north, 90 faces east, 180 faces south, and 270 faces west [1].The units of aspect in this data set are degrees according to the metadata.
+
+6. Interpret the shape of the aspect histogram in non-technical language that a non-scientist audience would understand
+
+```{r}
+hist(dat_habitat$aspect, 
+     main = "Histogram of Bird Census Sampling site Aspect",xlab = "Aspect (degrees)", breaks = c(0,30,60,90,120, 150,180,210,240,270,300, 330,360))
+```
+6.In the aspect histogram, more sampling sites are on the north facing slop versus the south facing slope as a higher number of them are at slopes facing 0 degrees than 180 degrees. There is no tendency towards sampling sites being on north facing or south facing slopes.  The sampling sites collectively are largely evenly distributed as each slope direction, aspect, contains between 80 and 100 sites. This means that bird sampling sites were observed on north, east, west, or south facing slopes. 
+``
+7. Create scatter plots of total basal area and each of the the terrain variables: elevation, slope, and aspect. Basal area should be on the y-axis.
+plot()
+```{r}
+#calculate the coordinates of points on a line 
+#given the x- and y- coordinates of a known point and a slope
+
+#the four arguments to line_point_slope() are:
+#the x-value for which to calculate the y-value output
+#the x-coordinate of the known point along the line.
+#the y-coordinate of the known point along the line.
+#the slope of the line.
+line_point_slope <-  function(x, x1, y1, slope)
+{
+  get_y_intercept <- 
+    function(x1, y1, slope)
+      return(-(x1*slope)+ y1)
+  
+  linear <- 
+    function(x1, yint, slope)
+      return(yint + x*slope)
+  
+  return(linear(x,get_y_intercept(x1,y1,slope), slope))
+}
+```
+``
+```{r}
+par(mfrow = c(3, 1))
+plot( x = dat_habitat$elev, y = dat_habitat$ba.tot, main = "Total Basal Area Per Elevation", 
+      xlab = "Elevevation (m)", ylab = "Total Basal Area (m2 per ha)", cex = 0.2)
+
+#Find the center of the first plot here
+data_center_x <- mean(dat_habitat$elev)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+#Add a red point at the center of the existing plot
+points(x = data_center_x , y = data_center_y , col = "red")
+
+#Use curve() to add a line or other curve to the existing plot
+curve(
+  line_point_slope(
+    x, 
+    data_center_x, 
+   data_center_y ,
+  0.1
+  ), 
+  add = TRUE)
+```
+
+```{r}
+ plot(x = dat_habitat$slope, y = dat_habitat$ba.tot, main = "Total Basal Area Per Slope",
+     xlab = "Slope (%)", ylab = "Total Basal Area (m2 per ha)", cex = 0.7)
+
+#Find the center of the second plot here
+data_center_x <- mean(dat_habitat$slope)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+#Add a red point at the center of the existing plot
+points(x = data_center_x , y = data_center_y , col = "blue")
+
+#calculate the coordinates of points on a line 
+#given the x- and y- coordinates of a known point and a slope
+
+#Use curve() to add a line or other curve to the existing plot
+curve(
+  line_point_slope(
+    x, 
+    data_center_x, 
+   data_center_y,
+  0.8
+  ), 
+  add = TRUE)
+
+```
+
+```{r}
+ plot(x = dat_habitat$aspect, y = dat_habitat$ba.tot,  main = "Total Basal Area Per Aspect",
+     xlab = "Aspect (degrees)", ylab = "Total Basal Area (m2 per ha)", cex = 0.7)
+
+#Find the center of the third plot here
+data_center_x <- mean(dat_habitat$aspect)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+#Add a red point at the center of the existing plot
+points(x = data_center_x , y = data_center_y , col = "green")
+
+#calculate the coordinates of points on a line 
+#given the x- and y- coordinates of a known point and a slope
+
+#Use curve() to add a line or other curve to the existing plot
+curve(
+  line_point_slope(
+    x, 
+    data_center_x, 
+   data_center_y,
+  0.8
+  ), 
+  add = TRUE)
+
+```
+
+A plot with three panels in a single row, or in a single column can be awkwardly long or tall. What if you combined your histograms and scatterplots into a larger figure with 6 panels?
+```{r}
+par(mfcol = c(3, 2))
+hist(dat_habitat$elev,
+     main = "Histogram of Bird Census Sampling site Elevation",xlab = "Elevation (m)")
+hist(dat_habitat$slope, 
+     main = "Histogram of Bird Census Sampling site Slope",xlab = "Slope (%)")
+hist(dat_habitat$aspect, 
+     main = "Histogram of Bird Census Sampling site Aspect",xlab = "Aspect (degrees)", breaks = c(0,30,60,90,120, 150,180,210,240,270,300, 330,360))
+
+ plot( x = dat_habitat$elev, y = dat_habitat$ba.tot, main = "Total Basal Area Per Elevation", 
+      xlab = "Elevevation (m)", ylab = "Total Basal Area (m2 per ha)", cex = 0.2)
+
+data_center_x <- mean(dat_habitat$elev)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+points(x = data_center_x , y = data_center_y , col = "red")
+curve(line_point_slope( x, data_center_x, data_center_y , 0.1 ), add = TRUE)
+
+plot(x = dat_habitat$slope, y = dat_habitat$ba.tot, main = "Total Basal Area Per Slope",
+     xlab = "Slope (%)", ylab = "Total Basal Area (m2 per ha)", cex = 0.7)
+
+data_center_x <- mean(dat_habitat$slope)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+points(x = data_center_x , y = data_center_y , col = "blue")
+curve( line_point_slope(x,  data_center_x, data_center_y, 0.8 ), add = TRUE)
+
+plot(x = dat_habitat$aspect, y = dat_habitat$ba.tot,  main = "Total Basal Area Per Aspect",
+     xlab = "Aspect (degrees)", ylab = "Total Basal Area (m2 per ha)", cex = 0.7)
+
+data_center_x <- mean(dat_habitat$aspect)
+data_center_y <- mean(dat_habitat$ba.tot)
+c(data_center_x, data_center_y)
+
+points(x = data_center_x , y = data_center_y , col = "green")
+
+curve(line_point_slope(x, data_center_x, data_center_y, 0.4), add = TRUE)
+
+```
+
+8. For each terrain variable (elevation, slope, aspect), describe the relationship you observe and your model fit. You should consider
+
+Is there a noticeable association?
+If so, is it linear?
+Based on a visual assessment, is your linear model a good fit for the data, why or why not?
+
+
+In the elevation scatter plot the majority of the data is concentrated between 200-500 meters. The highest total basal area lies in this range as well. Considering the majority of the data  lies towards the leftof this plot at 500 meters and transition from being largely above the linear model to below it, the linear model is not a good fit for for this data. In the slope scatter plot, the data is more evenly distributed though the majority of data is concentrated between 40-70 percent slope. The highest total basal area lies in this range as well. Considering that distribution of data about the linear model is largely even, the linear model is also not a good fit for this data. The data within the aspect scatter plot is the most evenly distributed between these three terrain variables. The data distribution is largely even from 0-360 degrees. The data largely lies below the linear model and therefore it is a good fit for the data.
+
+
+#Citations
+#“Slope, Aspect, and HILLSHADE.” Slope, Aspect, and Hillshade | GEOG 480: Exploring Imagery and Elevation Data in GIS Applications, www.e-education.psu.edu/geog480/node/490. 
