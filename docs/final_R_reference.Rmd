@@ -16,6 +16,47 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Loading Data and Packages
 
+### libary()
+
+**The function library() loads an R pacakge (code, documentation, data).**
+
+Here is an example using the built in Palmer Penguins package.
+
+```{r}
+library(palmerpenguins)
+```
+
+Observe summary statistics on this data set.
+
+```{r}
+summary(penguins)
+```
+
+### require()
+
+**The require function also loads and R package (necessary when working in an R markdown in which a new R session is created every time the document is run).**
+
+Here is an example using the Here package.
+
+```{r}
+require(here)
+```
+
+### here()
+
+***The here function returns any subdirectory's file within an r project regardless of what the working directory is.***
+
+### read.csv()
+
+***The read.csv function converts a .csv file into tabulated data, converting it into a data frame.***
+
+Here is an example using both here() and read.csv() functions on 2021 ginkgo data.
+
+
+```{r}
+ginkgo = read.csv(here("data","ginkgo_data_2021.csv"))
+```
+
 ## Data Strucutures 
 
 ### c()
@@ -116,10 +157,31 @@ mat_2
 
 ### data.frame()
 
-**The function data.frame() coerces a vector or matrix into a data frame which is a data type that can contain several data types.**
+**The function data.frame() creates a data frame which is a data type that can contain several data types.**
 
+Here is an example using the Gentoo Penguin.
 
+Create vectors of Palmer Penguin facts
 
+```{r}
+names = c("Adelie", "Chinstrap", "Gentoo")
+
+avg_height_in = c(27.6,28,30)
+
+flight = c(FALSE,FALSE,FALSE)
+```
+
+create data frame from these facts
+
+```{r}
+pen_facts = data.frame(names, avg_height_in, flight)
+```
+
+check the data type of pen_facts using the class() function
+
+```{r}
+class(pen_facts)
+```
 
 ### nrow()
 
@@ -127,38 +189,69 @@ mat_2
 
 Here’s an example using the ginkgo data.frame(a data type that can contain several data types).
 
-```{r}
-require(here)
-
-gink_dat = read.csv(here("data", "ginkgo_data_2021.csv"))
-```
 
 ```{r}
-nrow(gink_dat)
+nrow(ginkgo)
 ```
+
+### ncol()
 
 **The function ncol() returns the number of columns present in a vector, matrix or data frame.**
 
 Here’s an example using the ginkgo data.frame.
 
 ```{r}
-ncol(gink_dat)
+ncol(ginkgo)
 ```
 
-dim()
+### dim()
 
 **The function dim() returns the number of rows and columns present in a vector, matrix or data frame.**
 
-Here’s an example using the ginkgo data.frame(a data type that can contain several data types).
+Here’s an example using the ginkgo data.frame.
 
 ```{r}
-dim(gink_dat)
+dim(ginkgo)
 ```
 
-## subsetting 
+## Subsetting 
+
+Subsetting extracts specified elements of vectors, matrices or elements
+
+Use the ginkgo data for these examples:
+
+$ Subset a data frame by name: select one of the columns in the ginkgo data
+
+```{r}
+ginkgo$max_width
+```
+
+[] Use subset by position to:
+
+select first row of the ginkgo data
+
+```{r}
+ginkgo[1,]
+```
 
 
+select the element in row 2, column 3
 
+```{r}
+ginkgo[2,3]
+```
+
+select the 3rd column of the ginkgo data
+
+```{r}
+ginkgo[,3]
+```
+
+subset() Use this function to retrieve all the data for Adelie penguins (in the species column) from the peuguins dataset.
+
+```{r}
+subset(penguins$species, penguins == "Adelie")
+```
 
 ##  Numerical Data Exploration 
 ...

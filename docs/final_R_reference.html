@@ -175,6 +175,50 @@ pre code {
 <h1 class="tabset tabset-pills">R Reference Guide</h1>
 <div id="loading-data-and-packages" class="section level2">
 <h2>Loading Data and Packages</h2>
+<div id="libary" class="section level3">
+<h3>libary()</h3>
+<p><strong>The function library() loads an R pacakge (code, documentation, data).</strong></p>
+<p>Here is an example using the built in Palmer Penguins package.</p>
+<pre class="r"><code>library(palmerpenguins)</code></pre>
+<pre><code>## Warning: package &#39;palmerpenguins&#39; was built under R version 4.1.1</code></pre>
+<p>Observe summary statistics on this data set.</p>
+<pre class="r"><code>summary(penguins)</code></pre>
+<pre><code>##       species          island    bill_length_mm  bill_depth_mm  
+##  Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  
+##  Chinstrap: 68   Dream    :124   1st Qu.:39.23   1st Qu.:15.60  
+##  Gentoo   :124   Torgersen: 52   Median :44.45   Median :17.30  
+##                                  Mean   :43.92   Mean   :17.15  
+##                                  3rd Qu.:48.50   3rd Qu.:18.70  
+##                                  Max.   :59.60   Max.   :21.50  
+##                                  NA&#39;s   :2       NA&#39;s   :2      
+##  flipper_length_mm  body_mass_g       sex           year     
+##  Min.   :172.0     Min.   :2700   female:165   Min.   :2007  
+##  1st Qu.:190.0     1st Qu.:3550   male  :168   1st Qu.:2007  
+##  Median :197.0     Median :4050   NA&#39;s  : 11   Median :2008  
+##  Mean   :200.9     Mean   :4202                Mean   :2008  
+##  3rd Qu.:213.0     3rd Qu.:4750                3rd Qu.:2009  
+##  Max.   :231.0     Max.   :6300                Max.   :2009  
+##  NA&#39;s   :2         NA&#39;s   :2</code></pre>
+</div>
+<div id="require" class="section level3">
+<h3>require()</h3>
+<p><strong>The require function also loads and R package (necessary when working in an R markdown in which a new R session is created every time the document is run).</strong></p>
+<p>Here is an example using the Here package.</p>
+<pre class="r"><code>require(here)</code></pre>
+<pre><code>## Loading required package: here</code></pre>
+<pre><code>## Warning: package &#39;here&#39; was built under R version 4.1.1</code></pre>
+<pre><code>## here() starts at C:/Users/timmy/OneDrive - University of Massachusetts/Documents/environmental_data</code></pre>
+</div>
+<div id="here" class="section level3">
+<h3>here()</h3>
+<p><strong><em>The here function returns any subdirectory’s file within an r project regardless of what the working directory is.</em></strong></p>
+</div>
+<div id="read.csv" class="section level3">
+<h3>read.csv()</h3>
+<p><strong><em>The read.csv function converts a .csv file into tabulated data, converting it into a data frame.</em></strong></p>
+<p>Here is an example using both here() and read.csv() functions on 2021 ginkgo data.</p>
+<pre class="r"><code>ginkgo = read.csv(here(&quot;data&quot;,&quot;ginkgo_data_2021.csv&quot;))</code></pre>
+</div>
 </div>
 <div id="data-strucutures" class="section level2">
 <h2>Data Strucutures</h2>
@@ -252,12 +296,205 @@ mat_2</code></pre>
 ## [1,] &quot;T&quot;                   &quot;salamander&quot;             
 ## [2,] &quot;data is pretty cool&quot; &quot;R helped me like coding&quot;</code></pre>
 </div>
-<div id="next-section" class="section level3">
-<h3>Next Section…</h3>
+<div id="data.frame" class="section level3">
+<h3>data.frame()</h3>
+<p><strong>The function data.frame() creates a data frame which is a data type that can contain several data types.</strong></p>
+<p>Here is an example using the Gentoo Penguin.</p>
+<p>Create vectors of Palmer Penguin facts</p>
+<pre class="r"><code>names = c(&quot;Adelie&quot;, &quot;Chinstrap&quot;, &quot;Gentoo&quot;)
+
+avg_height_in = c(27.6,28,30)
+
+flight = c(FALSE,FALSE,FALSE)</code></pre>
+<p>create data frame from these facts</p>
+<pre class="r"><code>pen_facts = data.frame(names, avg_height_in, flight)</code></pre>
+<p>check the data type of pen_facts using the class() function</p>
+<pre class="r"><code>class(pen_facts)</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+</div>
+<div id="nrow" class="section level3">
+<h3>nrow()</h3>
+<p><strong>The function nrow() returns the number of rows present in a vector, matrix or data frame.</strong></p>
+<p>Here’s an example using the ginkgo data.frame(a data type that can contain several data types).</p>
+<pre class="r"><code>nrow(ginkgo)</code></pre>
+<pre><code>## [1] 756</code></pre>
+</div>
+<div id="ncol" class="section level3">
+<h3>ncol()</h3>
+<p><strong>The function ncol() returns the number of columns present in a vector, matrix or data frame.</strong></p>
+<p>Here’s an example using the ginkgo data.frame.</p>
+<pre class="r"><code>ncol(ginkgo)</code></pre>
+<pre><code>## [1] 6</code></pre>
+</div>
+<div id="dim" class="section level3">
+<h3>dim()</h3>
+<p><strong>The function dim() returns the number of rows and columns present in a vector, matrix or data frame.</strong></p>
+<p>Here’s an example using the ginkgo data.frame.</p>
+<pre class="r"><code>dim(ginkgo)</code></pre>
+<pre><code>## [1] 756   6</code></pre>
 </div>
 </div>
 <div id="subsetting" class="section level2">
 <h2>subsetting</h2>
+<p>Subsetting extracts specified elements of vectors, matrices or elements</p>
+<p>Use the ginkgo data for these examples:</p>
+<p>$ Subset a data frame by name: select one of the columns in the ginkgo data</p>
+<pre class="r"><code>ginkgo$max_width</code></pre>
+<pre><code>##   [1]  71.0  64.0  55.0  62.0  65.0  70.0  63.0  56.0  51.0  57.0  59.0  63.0
+##  [13]  70.0  50.0  56.0  46.0  54.0  62.0  56.0  55.0  59.0  60.0  63.0  61.0
+##  [25]  58.0  55.0  53.0  81.0  94.0  75.0  82.0  86.0  79.0  93.0  88.0  76.0
+##  [37]  71.0  91.0  71.0  82.0  65.0  83.0  73.0 102.0  78.0  88.0  81.0  70.0
+##  [49]  80.0  96.0  80.0  82.0  86.0  87.0  89.0  69.0  93.0  98.0  81.0  79.0
+##  [61]  82.0  85.0  81.0  59.0  53.0  83.0  80.0  77.0  81.0  76.0  82.0  81.0
+##  [73]  77.0  68.0  41.0  70.0  68.0  80.0  89.0  90.0  71.0  64.0  55.0  62.0
+##  [85]  65.0  70.0  63.0  56.0  51.0  57.0  59.0  63.0  70.0  50.0  56.0  46.0
+##  [97]  54.0  62.0  56.0  55.0  59.0  60.0  63.0  61.0  58.0  55.0  53.0  77.0
+## [109]  72.0  57.0  75.0  75.0  75.0  67.0  74.0  71.0  72.0  55.0  77.0  97.0
+## [121]  73.0  64.0  69.0  92.0  64.0  68.0  53.0  97.0 100.0  90.0  89.0  59.0
+## [133]  97.0  76.0  85.0  90.0  87.0  85.0  80.0  86.0  89.0  84.0  88.0  80.0
+## [145] 102.0  94.0  95.0 109.0  84.0  68.0  59.0  74.0  70.0  71.0  69.0  74.0
+## [157]  70.0  78.0  87.0  69.0  60.0  72.0  59.0  75.0  81.0  82.0  74.0  72.0
+## [169]  79.0  84.0  75.0  72.0  88.0  80.0  90.0  58.0  61.0  95.0  72.0  90.0
+## [181]  99.0 102.0  56.0  81.0  69.0  65.0  87.0  86.0  96.0  73.0  98.0  99.0
+## [193]  58.0  65.0 106.0  77.0  80.0  68.0  62.0  65.0  52.0  84.0  59.0  60.0
+## [205]  85.0  59.0  51.0  56.0  66.0  67.0  69.0  54.0  59.0  60.0  73.0  69.0
+## [217]  58.0  65.0  64.0  69.0  69.0  62.0  42.0  52.0  44.0  27.0  42.0  49.0
+## [229]  75.0  66.0  80.0  78.0  75.0  72.0  87.0  85.0  70.0  70.0  70.0  74.0
+## [241]  71.0  84.0  65.0  86.0  71.0  84.0  65.0  69.0  90.0  77.0  75.0  70.0
+## [253]  90.0  77.0  56.0  47.0  72.0  52.0  72.0  85.0  78.0  81.0  92.0  80.0
+## [265]  78.0  75.0  90.0  82.0 109.0  72.0  85.0  52.0  90.0 102.0  82.0  59.0
+## [277]  67.0  95.0  67.0  96.0  94.0 101.0  79.0  82.0  98.0  89.0  87.0  59.0
+## [289]  54.0  84.0  56.0  56.0  70.0  53.0  65.0  95.0  95.0  47.0  46.0  82.0
+## [301]  81.0  82.0  68.0  46.0  84.0  52.0  73.0  85.0  88.0  75.0  72.0  81.0
+## [313]  79.0  68.0  82.0  76.0  69.0  64.0  65.0  82.0  75.0  60.0  87.0  57.0
+## [325]  76.0  63.0  88.0  70.0  40.0  70.0  72.0  66.0  54.0  74.0  78.0  86.0
+## [337]  70.0 104.0  81.0  86.0  75.0  90.0  88.0  97.0  78.0  85.0  83.0  58.0
+## [349]  68.0  81.0  80.0  72.0  76.0  71.0  75.0  75.0  82.0  61.0  55.0  72.0
+## [361]  69.0  75.0  72.0  74.0  78.0  85.0  78.0  68.0  56.0  41.0  55.0  72.0
+## [373]  60.0  67.0  69.0  44.0  98.0  61.0  82.0  66.0  84.0  63.0  44.0  57.0
+## [385]  64.0  73.0  87.0  63.0  59.0  73.0  75.0  48.0  72.0  49.0  64.0  54.0
+## [397]  67.0  60.0  77.0  76.0  63.0  42.0  83.0  70.0  74.0  63.0  71.0  44.0
+## [409]  57.0  70.0  51.0  74.0  67.0  72.0  76.0  89.0  71.0  64.0 100.0  98.0
+## [421]  89.0  90.0 105.0  62.0  53.0  70.0  82.0  54.0  86.0  67.0  75.0  78.0
+## [433]  89.0  68.0  73.0  70.0  56.0  68.0  68.0  60.0  80.0  77.0  73.5  93.0
+## [445]  89.0  68.0  84.0  96.0  75.0  56.0  60.0  67.0  64.0  90.0  72.0  74.0
+## [457]  69.0  79.0  78.0  98.0  99.0  71.0  97.0 106.0  99.0  96.0  94.0  92.0
+## [469]  85.0  73.0  95.0  78.0  60.0  83.0  82.0  85.0  66.0  71.0  59.0  70.0
+## [481]  78.0  62.0  71.0  90.0  70.0  63.0  82.7  59.0  82.0  51.0  62.0  66.0
+## [493]  91.0  89.0  93.0  67.0  98.0  81.0  88.0 100.0  90.0  94.0 117.0 101.0
+## [505]  92.0  88.0  65.0 102.0  65.0  91.0  92.0  97.0  97.0  78.0  73.0  79.0
+## [517]  72.0  74.0  73.0  72.0  76.0  69.0  92.0  70.0  72.0 106.0  89.0  77.0
+## [529]  63.0  52.0  57.0  54.0  85.0  72.0  87.0  72.0 120.0  93.0  86.0  88.0
+## [541]  84.0  90.0  69.0  70.0  72.0  70.0  72.0  88.0  89.0  50.0  68.0  93.0
+## [553]  80.0  63.0  85.0  89.0  50.0 108.0  83.0 113.0  80.0  86.0 110.0  92.0
+## [565]  73.0  95.0  85.0  65.0  64.0 100.0  75.0  83.0  69.0  75.0  69.0  88.0
+## [577] 108.0  91.0  90.0  74.0 102.0  69.0  72.0  99.0  92.0  85.0  91.0 100.0
+## [589]  71.0  99.0  55.0  90.0  86.0  72.0  83.0  84.0 105.0  74.0  83.0  76.0
+## [601]  48.0  66.0  52.0  74.0  81.5 114.0 104.0  78.0  97.0  92.0  54.0  83.0
+## [613]  86.0  80.0  28.0  52.0 101.0  96.0  76.0  73.0  84.0  68.0  89.0  87.0
+## [625]  78.0  91.0  97.0  80.0  92.0  81.0  96.0  42.0  71.0 111.0  60.0  77.0
+## [637]  35.0  84.0 119.0  98.0 103.0  55.0  81.0 100.0  75.0 123.0 107.0  73.0
+## [649]  76.0 109.0  85.0 121.0  96.0 100.0  86.0  55.0  82.0 115.0 116.0  66.0
+## [661]  78.0 121.0  60.0 101.0  90.0  65.0 130.0  86.0  72.0  59.0  90.0  72.0
+## [673] 103.0  84.0  78.0  87.0  95.0  68.0  83.0  70.0  71.0  63.0  62.0  51.0
+## [685]  51.0  66.0  73.0  65.0  66.0  81.0  49.0  61.0  48.0  43.0  61.0  53.0
+## [697]  55.0  38.0  78.0  58.0  58.0  53.0  53.0  55.0  40.0  35.0  54.0  54.0
+## [709]  38.0  44.0  53.0  42.0  49.0  45.0  42.0  34.0  36.0  39.0  16.0  75.0
+## [721]  62.0 103.0  92.0  74.0  68.0  84.0  88.0  70.0  41.0  70.0  38.0  75.0
+## [733]  67.0  72.0  61.0  68.0  54.0  93.0  75.0  74.0  61.0  72.0  68.0  62.0
+## [745]  72.0  66.0  68.0  74.0  65.0  68.0  78.0  75.0  78.0  65.0  74.0 105.0</code></pre>
+<p>[] Use subset by position to:</p>
+<p>select first row of the ginkgo data</p>
+<pre class="r"><code>ginkgo[1,]</code></pre>
+<pre><code>##   ï..site_id seeds_present max_width max_depth notch_depth petiole_length
+## 1       7719         FALSE        71        40           0             30</code></pre>
+<p>select the element in row 2, column 3</p>
+<pre class="r"><code>ginkgo[2,3]</code></pre>
+<pre><code>## [1] 64</code></pre>
+<p>select the 3rd column of the ginkgo data</p>
+<pre class="r"><code>ginkgo[,3]</code></pre>
+<pre><code>##   [1]  71.0  64.0  55.0  62.0  65.0  70.0  63.0  56.0  51.0  57.0  59.0  63.0
+##  [13]  70.0  50.0  56.0  46.0  54.0  62.0  56.0  55.0  59.0  60.0  63.0  61.0
+##  [25]  58.0  55.0  53.0  81.0  94.0  75.0  82.0  86.0  79.0  93.0  88.0  76.0
+##  [37]  71.0  91.0  71.0  82.0  65.0  83.0  73.0 102.0  78.0  88.0  81.0  70.0
+##  [49]  80.0  96.0  80.0  82.0  86.0  87.0  89.0  69.0  93.0  98.0  81.0  79.0
+##  [61]  82.0  85.0  81.0  59.0  53.0  83.0  80.0  77.0  81.0  76.0  82.0  81.0
+##  [73]  77.0  68.0  41.0  70.0  68.0  80.0  89.0  90.0  71.0  64.0  55.0  62.0
+##  [85]  65.0  70.0  63.0  56.0  51.0  57.0  59.0  63.0  70.0  50.0  56.0  46.0
+##  [97]  54.0  62.0  56.0  55.0  59.0  60.0  63.0  61.0  58.0  55.0  53.0  77.0
+## [109]  72.0  57.0  75.0  75.0  75.0  67.0  74.0  71.0  72.0  55.0  77.0  97.0
+## [121]  73.0  64.0  69.0  92.0  64.0  68.0  53.0  97.0 100.0  90.0  89.0  59.0
+## [133]  97.0  76.0  85.0  90.0  87.0  85.0  80.0  86.0  89.0  84.0  88.0  80.0
+## [145] 102.0  94.0  95.0 109.0  84.0  68.0  59.0  74.0  70.0  71.0  69.0  74.0
+## [157]  70.0  78.0  87.0  69.0  60.0  72.0  59.0  75.0  81.0  82.0  74.0  72.0
+## [169]  79.0  84.0  75.0  72.0  88.0  80.0  90.0  58.0  61.0  95.0  72.0  90.0
+## [181]  99.0 102.0  56.0  81.0  69.0  65.0  87.0  86.0  96.0  73.0  98.0  99.0
+## [193]  58.0  65.0 106.0  77.0  80.0  68.0  62.0  65.0  52.0  84.0  59.0  60.0
+## [205]  85.0  59.0  51.0  56.0  66.0  67.0  69.0  54.0  59.0  60.0  73.0  69.0
+## [217]  58.0  65.0  64.0  69.0  69.0  62.0  42.0  52.0  44.0  27.0  42.0  49.0
+## [229]  75.0  66.0  80.0  78.0  75.0  72.0  87.0  85.0  70.0  70.0  70.0  74.0
+## [241]  71.0  84.0  65.0  86.0  71.0  84.0  65.0  69.0  90.0  77.0  75.0  70.0
+## [253]  90.0  77.0  56.0  47.0  72.0  52.0  72.0  85.0  78.0  81.0  92.0  80.0
+## [265]  78.0  75.0  90.0  82.0 109.0  72.0  85.0  52.0  90.0 102.0  82.0  59.0
+## [277]  67.0  95.0  67.0  96.0  94.0 101.0  79.0  82.0  98.0  89.0  87.0  59.0
+## [289]  54.0  84.0  56.0  56.0  70.0  53.0  65.0  95.0  95.0  47.0  46.0  82.0
+## [301]  81.0  82.0  68.0  46.0  84.0  52.0  73.0  85.0  88.0  75.0  72.0  81.0
+## [313]  79.0  68.0  82.0  76.0  69.0  64.0  65.0  82.0  75.0  60.0  87.0  57.0
+## [325]  76.0  63.0  88.0  70.0  40.0  70.0  72.0  66.0  54.0  74.0  78.0  86.0
+## [337]  70.0 104.0  81.0  86.0  75.0  90.0  88.0  97.0  78.0  85.0  83.0  58.0
+## [349]  68.0  81.0  80.0  72.0  76.0  71.0  75.0  75.0  82.0  61.0  55.0  72.0
+## [361]  69.0  75.0  72.0  74.0  78.0  85.0  78.0  68.0  56.0  41.0  55.0  72.0
+## [373]  60.0  67.0  69.0  44.0  98.0  61.0  82.0  66.0  84.0  63.0  44.0  57.0
+## [385]  64.0  73.0  87.0  63.0  59.0  73.0  75.0  48.0  72.0  49.0  64.0  54.0
+## [397]  67.0  60.0  77.0  76.0  63.0  42.0  83.0  70.0  74.0  63.0  71.0  44.0
+## [409]  57.0  70.0  51.0  74.0  67.0  72.0  76.0  89.0  71.0  64.0 100.0  98.0
+## [421]  89.0  90.0 105.0  62.0  53.0  70.0  82.0  54.0  86.0  67.0  75.0  78.0
+## [433]  89.0  68.0  73.0  70.0  56.0  68.0  68.0  60.0  80.0  77.0  73.5  93.0
+## [445]  89.0  68.0  84.0  96.0  75.0  56.0  60.0  67.0  64.0  90.0  72.0  74.0
+## [457]  69.0  79.0  78.0  98.0  99.0  71.0  97.0 106.0  99.0  96.0  94.0  92.0
+## [469]  85.0  73.0  95.0  78.0  60.0  83.0  82.0  85.0  66.0  71.0  59.0  70.0
+## [481]  78.0  62.0  71.0  90.0  70.0  63.0  82.7  59.0  82.0  51.0  62.0  66.0
+## [493]  91.0  89.0  93.0  67.0  98.0  81.0  88.0 100.0  90.0  94.0 117.0 101.0
+## [505]  92.0  88.0  65.0 102.0  65.0  91.0  92.0  97.0  97.0  78.0  73.0  79.0
+## [517]  72.0  74.0  73.0  72.0  76.0  69.0  92.0  70.0  72.0 106.0  89.0  77.0
+## [529]  63.0  52.0  57.0  54.0  85.0  72.0  87.0  72.0 120.0  93.0  86.0  88.0
+## [541]  84.0  90.0  69.0  70.0  72.0  70.0  72.0  88.0  89.0  50.0  68.0  93.0
+## [553]  80.0  63.0  85.0  89.0  50.0 108.0  83.0 113.0  80.0  86.0 110.0  92.0
+## [565]  73.0  95.0  85.0  65.0  64.0 100.0  75.0  83.0  69.0  75.0  69.0  88.0
+## [577] 108.0  91.0  90.0  74.0 102.0  69.0  72.0  99.0  92.0  85.0  91.0 100.0
+## [589]  71.0  99.0  55.0  90.0  86.0  72.0  83.0  84.0 105.0  74.0  83.0  76.0
+## [601]  48.0  66.0  52.0  74.0  81.5 114.0 104.0  78.0  97.0  92.0  54.0  83.0
+## [613]  86.0  80.0  28.0  52.0 101.0  96.0  76.0  73.0  84.0  68.0  89.0  87.0
+## [625]  78.0  91.0  97.0  80.0  92.0  81.0  96.0  42.0  71.0 111.0  60.0  77.0
+## [637]  35.0  84.0 119.0  98.0 103.0  55.0  81.0 100.0  75.0 123.0 107.0  73.0
+## [649]  76.0 109.0  85.0 121.0  96.0 100.0  86.0  55.0  82.0 115.0 116.0  66.0
+## [661]  78.0 121.0  60.0 101.0  90.0  65.0 130.0  86.0  72.0  59.0  90.0  72.0
+## [673] 103.0  84.0  78.0  87.0  95.0  68.0  83.0  70.0  71.0  63.0  62.0  51.0
+## [685]  51.0  66.0  73.0  65.0  66.0  81.0  49.0  61.0  48.0  43.0  61.0  53.0
+## [697]  55.0  38.0  78.0  58.0  58.0  53.0  53.0  55.0  40.0  35.0  54.0  54.0
+## [709]  38.0  44.0  53.0  42.0  49.0  45.0  42.0  34.0  36.0  39.0  16.0  75.0
+## [721]  62.0 103.0  92.0  74.0  68.0  84.0  88.0  70.0  41.0  70.0  38.0  75.0
+## [733]  67.0  72.0  61.0  68.0  54.0  93.0  75.0  74.0  61.0  72.0  68.0  62.0
+## [745]  72.0  66.0  68.0  74.0  65.0  68.0  78.0  75.0  78.0  65.0  74.0 105.0</code></pre>
+<p>subset() Use this function to retrieve all the data for Adelie penguins (in the species column) from the peuguins dataset.</p>
+<pre class="r"><code>subset(penguins$species, penguins == &quot;Adelie&quot;)</code></pre>
+<pre><code>##   [1] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [11] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [21] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [31] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [41] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [51] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [61] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [71] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [81] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+##  [91] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+## [101] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+## [111] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+## [121] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+## [131] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+## [141] Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie Adelie
+## [151] Adelie Adelie
+## Levels: Adelie Chinstrap Gentoo</code></pre>
 </div>
 <div id="numerical-data-exploration" class="section level2">
 <h2>Numerical Data Exploration</h2>
