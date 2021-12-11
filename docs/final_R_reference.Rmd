@@ -1,0 +1,164 @@
+---
+title: 'Final Project: R Reference'
+author: "Timothy Nsubuga"
+date: "12/2/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R Reference Guide {.tabset .tabset-pills}
+
+
+## Loading Data and Packages
+
+## Data Strucutures 
+
+### c()
+
+**The function c() combines or concatenates its arguments into a vector (a 1-dimensional data structure consisting of 1 or more elements).**
+
+* All of the elements must be of the same type.
+* I can’t combine character and numeric types in the same call to c()
+
+Here’s two examples using numeric and character data types:
+
+```{r}
+## Create a vector of numbers:
+num_vec  = c(1, 4, 8, 9, 13)
+
+## Create a vector of characters:
+char_vec = c("a", "fish", "data is cool")
+```
+
+I can show the contents of a vector by typing the name of the vector, or using the print() function.
+
+Typing the name of the vector into the console prints the contents
+
+```{r}
+## Typing the name of the vector into the console prints the contents
+num_vec
+```
+
+```{r}
+## The print() function accomplishes the same task:
+print(char_vec)
+```
+
+### length()
+
+**The function length() returns the number of elements contained in a vector.**
+
+Here’s two examples using numeric and character data types:
+
+```{r}
+## Create a vector of numbers:
+num_vec2  = c(5, 10, 36, 37, 45)
+
+## Create a vector of characters:
+char_vec2 = c("T", "ginkgo", "data is pretty cool")
+
+## Get length of num_vec2 and char_vec2
+
+length(num_vec2)
+
+length(char_vec2)
+```
+
+### matrix()
+
+**The function matrix() creates a 2-dimensional array(default: by column) of 1 data type from a given vector, and designated number of rows, and columns.**
+
+Here’s two examples using numeric and character data types:
+
+ Create a vector of numbers:
+```{r}
+num_vec3  = c(3, 10, 32, 37, 45)
+```
+
+
+Create a vector of characters:
+
+```{r}
+char_vec3 = c("T", "salamander", "data is pretty cool", "R helped me like coding")
+```
+
+
+ Get make a vector using  num_vec3 
+```{r}
+matrix(num_vec3, 3,2)
+
+```
+
+ Note the error, the length of the vector must be a multiple of the number of rows.
+
+try again
+
+```{r}
+num_vec4  = c(3, 10, 32, 37, 45,100)
+
+mat_1 = matrix(num_vec4, 3,2)
+ 
+mat_1
+```
+
+ make a matrix by row from char_vec3
+
+```{r}
+mat_2 = matrix(char_vec3, 2,2, byrow = TRUE)
+
+mat_2
+```
+
+### data.frame()
+
+**The function data.frame() coerces a vector or matrix into a data frame which is a data type that can contain several data types.**
+
+
+
+
+### nrow()
+
+**The function nrow() returns the number of rows present in a vector, matrix or data frame.**
+
+Here’s an example using the ginkgo data.frame(a data type that can contain several data types).
+
+```{r}
+require(here)
+
+gink_dat = read.csv(here("data", "ginkgo_data_2021.csv"))
+```
+
+```{r}
+nrow(gink_dat)
+```
+
+**The function ncol() returns the number of columns present in a vector, matrix or data frame.**
+
+Here’s an example using the ginkgo data.frame.
+
+```{r}
+ncol(gink_dat)
+```
+
+dim()
+
+**The function dim() returns the number of rows and columns present in a vector, matrix or data frame.**
+
+Here’s an example using the ginkgo data.frame(a data type that can contain several data types).
+
+```{r}
+dim(gink_dat)
+```
+
+## subsetting 
+
+
+
+
+##  Numerical Data Exploration 
+...
