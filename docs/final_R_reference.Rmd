@@ -18,18 +18,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### libary()
 
-**The function library() loads an R pacakge (code, documentation, data).**
+**The function library() loads an R package (code, documentation, data).**
 
 Here is an example using the built in Palmer Penguins package.
 
 ```{r}
 library(palmerpenguins)
-```
-
-Observe summary statistics on this data set.
-
-```{r}
-summary(penguins)
 ```
 
 ### require()
@@ -112,7 +106,7 @@ length(char_vec2)
 
 ### matrix()
 
-**The function matrix() creates a 2-dimensional array(default: by column) of 1 data type from a given vector, and designated number of rows, and columns.**
+**The function matrix() creates a 2-dimensional array(default: by column) of 1 data type from a given vector, designated number of rows, and columns.**
 
 Here’s two examples using numeric and character data types:
 
@@ -157,17 +151,20 @@ mat_2
 
 ### data.frame()
 
-**The function data.frame() creates a data frame which is a data type that can contain several data types.**
+**The function data.frame() creates a data frame which is a data structure that can contain several data types.**
 
 Here is an example using the Gentoo Penguin.
 
 Create vectors of Palmer Penguin facts
 
 ```{r}
+# vector of characters 
 names = c("Adelie", "Chinstrap", "Gentoo")
 
+# vector of numerics 
 avg_height_in = c(27.6,28,30)
 
+# vector of logicals
 flight = c(FALSE,FALSE,FALSE)
 ```
 
@@ -220,13 +217,13 @@ Subsetting extracts specified elements of vectors, matrices or elements
 
 Use the ginkgo data for these examples:
 
-$ Subset a data frame by name: select one of the columns in the ginkgo data
+### $ Subset a data frame by name: select one of the columns in the ginkgo data
 
 ```{r}
 ginkgo$max_width
 ```
 
-[] Use subset by position to:
+#### [] Use subset by position to:
 
 select first row of the ginkgo data
 
@@ -247,11 +244,124 @@ select the 3rd column of the ginkgo data
 ginkgo[,3]
 ```
 
-subset() Use this function to retrieve all the data for Adelie penguins (in the species column) from the peuguins dataset.
+## subset() 
+
+Use this function to retrieve all the data for Adelie penguins (in the species column) from the peuguins dataset.
 
 ```{r}
 subset(penguins$species, penguins == "Adelie")
 ```
 
 ##  Numerical Data Exploration 
-...
+
+### summary()
+
+**The summary() function returns summary statistics for a given data frame.**
+
+Here is an example using the Palmer Penguins data set.
+
+```{r}
+summary(penguins)
+```
+
+### mean()
+
+**The mean() function calculates the arithmetic average of a given  numeric vector, matrix and data frame.**
+
+Here is an example using the flipper flipper length of the Palmer Penguins(remove the NA values to preform the calculation).
+
+```{r}
+mean(penguins$flipper_length_mm, na.rm = TRUE)
+```
+
+### sd()
+
+**The sd() function calculates the standard deviation of a given numeric vector, matrix and data frame.**
+
+Here is an example using the flipper flipper length of the Palmer Penguins(remove the NA values to preform the calculation).
+
+```{r}
+sd(penguins$flipper_length_mm, na.rm = TRUE)
+```
+
+## Graphical Data Exploration
+
+#### Scatterplot:
+
+Using the ginkgo data, create a scatter plot of max leaf depth (x) and max leaf width (y).
+
+plot() required arguments:
+col =
+pch =
+cex =
+main =
+xlab =
+ylab =
+xlim =
+ylim =
+
+```{r}
+plot(x = ginkgo$max_depth, ginkgo$max_width, xlim = c(0,50), ylim = c(0,50), main = "Ginkgo Width as Predicted by Depth < 50 mm", xlab = "Max Leaf Depth (mm)", ylab = "Max Leaf Width (mm)", col = "green", pch = 1, cex = 1)
+```
+
+#### hist()
+
+Create a histogram of penguin flipper lengths. Required arguments:
+breaks =
+
+```{r}
+hist(penguins$flipper_length_mm, breaks = 10, main = "Palmer Penguins Flipper Lengths", xlab = "Flipper Length (mm)", col = "blue")
+```
+
+### boxplot()
+
+You must include two examples using the ginkgo data:
+
+a simple boxplot of ginkgo petiole lengths
+
+```{r}
+boxplot(ginkgo$petiole_length, main = "Ginkgo Petiole Lengths", xlab = "Petiole length (mm)")
+```
+
+conditional boxplot of one of the continuous variables conditioned on the seeds_present column.
+
+```{r}
+boxplot(formula =  max_depth ~ seeds_present, main = "Ginkgo Max Depth as Predicted by Seed Presence", xlab = "Seeds Present ",
+  data = ginkgo)
+```
+
+Create a 4-panel figure of histograms, arranged in a 2 by 2 grid. You may use any data you like, but each histogram must be different and have appropriate titles and axes. - par() required arguments: - mrow =
+
+```{r}
+par(mfrow = c(2,2))
+```
+
+```{r}
+hist( ginkgo$max_width, main = "Ginkgo Max Width", xlab = " Max Width (mm)")
+```
+
+```{r}
+hist( ginkgo$max_depth, main = "Ginkgo Max Depth", xlab = " Max Depth (mm)")
+```
+
+```{r}
+hist( ginkgo$notch_depth, main = "Ginkgo Notch Depth", xlab = " Notch Depth (mm)")
+```
+
+```{r}
+hist( ginkgo$petiole_length, main = "Ginkgo Petiole Length", xlab = " Petiole Length (mm)")
+```
+
+## Distribution Functions
+
+### dnorm()
+
+### pnorm()
+
+### qnorm()
+
+### dbinom()
+
+### pbinom()
+
+### qbinom()
