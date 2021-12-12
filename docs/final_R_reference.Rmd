@@ -334,21 +334,13 @@ Create a 4-panel figure of histograms, arranged in a 2 by 2 grid. You may use an
 
 ```{r}
 par(mfrow = c(2,2))
-```
 
-```{r}
 hist( ginkgo$max_width, main = "Ginkgo Max Width", xlab = " Max Width (mm)")
-```
 
-```{r}
 hist( ginkgo$max_depth, main = "Ginkgo Max Depth", xlab = " Max Depth (mm)")
-```
 
-```{r}
 hist( ginkgo$notch_depth, main = "Ginkgo Notch Depth", xlab = " Notch Depth (mm)")
-```
 
-```{r}
 hist( ginkgo$petiole_length, main = "Ginkgo Petiole Length", xlab = " Petiole Length (mm)")
 ```
 
