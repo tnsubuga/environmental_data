@@ -38,11 +38,11 @@ require(here)
 
 ### here()
 
-***The here function returns any subdirectory's file within an r project regardless of what the working directory is.***
+**The here function returns any subdirectory's file within an r project regardless of what the working directory is.**
 
 ### read.csv()
 
-***The read.csv function converts a .csv file into tabulated data, converting it into a data frame.***
+**The read.csv function converts a .csv file into tabulated data, converting it into a data frame.**s
 
 Here is an example using both here() and read.csv() functions on 2021 ginkgo data.
 
@@ -348,12 +348,67 @@ hist( ginkgo$petiole_length, main = "Ginkgo Petiole Length", xlab = " Petiole Le
 
 ### dnorm()
 
+**dnorm() is the probability density function for the normal distribution.**
+
+Here is an example that test where 1.2 or 2.4 is more likely:
+
+```{r}
+dnorm(1.2)
+
+dnorm(2.4)
+```
+
+1.2 is more likely. 
+
 ### pnorm()
 
-### qnorm()
+**pnorm() is the cumlative density function for the normal distribution.**
+
+Here is an example to determine the probability of observing a value of less than 1.2 from a normally-distributed population with mean = 2 and standard deviation = 2
+
+
+```{r }
+pnorm(q = 1.2, mean = 2, sd = 2)
+```
+
+### qnorm() 
+
+**qnorm() is the Quantile function for the normal distribution that returns the value associated wiith a specific probability (quantile).**
+
+Here is an example to determine the median of the standard normal distribution
+
+```{r}
+qnorm(0.50)
+```
+
 
 ### dbinom()
 
+**dbinom() is the probability denisty function for the binomial distribution.**
+
+Here is an example that determines the probability of observing a count of exactly 3 successes 
+
+```{r }
+dbinom(x = 3, size = 4, p = 0.75)
+```
+
 ### pbinom()
 
-### qbinom()
+**pbinom() is the cumulative mass function for the binomial distribution.**
+
+Here is an example of observing the probability of observing a count of 3 successes or fewer with  4 trials and probability of success for each trial  = 0.75
+
+```{r}
+pbinom(q = 3, size = 4, p = 0.75)
+```
+
+### qbinom() FINISH LATER
+
+**qbinorm() is the Quantile function for the binomial distribution that returns the value associated with a specific probability (quantile).**
+
+
+Here is an example to determine the median of the binomial distribution  with parameters with 4 trials  and probability of success for each trial = 0.75
+
+```{r}
+qbinom(p = 0.50, size = 4, prob = 0.75)
+```
