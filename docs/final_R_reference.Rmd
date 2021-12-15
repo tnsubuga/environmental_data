@@ -42,7 +42,7 @@ require(here)
 
 ### read.csv()
 
-**The read.csv function converts a .csv file into tabulated data, converting it into a data frame.**s
+**The read.csv function converts a .csv file into tabulated data, converting it into a data frame.**
 
 Here is an example using both here() and read.csv() functions on 2021 ginkgo data.
 

@@ -1,0 +1,436 @@
+---
+title: 'Part 2: Data Analysis'
+author: "Timothy Nsubuga"
+date: "12/13/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Directions and Questions {.tabset .tabset-pills}
+
+You’ll perform a complete data analysis on the Delomys species data. You can do your work in a RMarkdown document, or an R script.
+
+```{r}
+require(here)
+delomys = read.csv(here("data","delomys.csv"))
+```
+
+## Data Exploration
+
+#### Numerical Exploration
+
+Create a code chunk that includes the following:
+
+Use summary() on the body mass and body length data columns in the Delomys data set to display summary statistics.
+
+```{r summary() on the body mass and body length}
+summary(delomys$body_mass)
+
+summary(delomys$body_length)
+
+```
+
+Perform a test of normality on the body mass and length columns. You can use shapiro.test()
+
+```{r test of normality on the body mass and length columns}
+shapiro.test(delomys$body_mass)
+
+shapiro.test(delomys$body_length)
+```
+
+### Graphical Exploration
+
+You can adjust the size of the plots on your rendered document using the following code chunk arguments:
+
+fig.height= fig.width=
+
+You can adjust the aspect ratio using fig.aspect=
+
+The code chunk format with an option looks like:
+
+The code chunk format with an option looks like:
+
+```{r fig.width=10}
+
+
+require(palmerpenguins)
+
+
+plot(bill_length_mm ~ body_mass_g, data = penguins)
+
+```
+
+Using code chunks, create the following plots, which you’ll use to answer the report questions:
+
+A scatterplot of body mass and body length
+
+```{r scatterplot of body mass and body length}
+plot(delomys$body_mass, delomys$body_length, main = "Delomys Body Length as Predicted by Body Mass", xlab = "body mass", ylab = "body length")
+```
+
+A histogram of body mass
+
+```{r}
+hist(delomys$body_mass,  main = "Histogram of Delomys Body Mass", xlab = "body mass")
+```
+
+A histogram of body length
+
+```{r histogram of body length}
+hist(delomys$body_length, main = "Histogram of Delomys Body Length ", xlab = "body length")
+```
+
+A conditional boxplot of body mass, conditioned on species (column binomial)
+
+```{r conditional boxplot of body mass conditioned on species}
+boxplot(formula = body_mass ~ binomial, 
+        main = " Delomys Body Length Conditioned on Species ", 
+        data = delomys)
+```
+
+
+A conditional boxplot of body mass, conditioned on sex 
+```{r conditional boxplot of body mass conditioned on sex }
+boxplot(formula = body_mass ~ sex, 
+        main = " Delomys Body Length Conditioned on Sex", 
+        data = delomys)
+```
+
+A conditional boxplot of body mass, conditioned on both species and sex
+
+```{r fig.width=10}
+boxplot(formula = body_mass ~ binomial * sex, 
+        main = " Delomys Body Length Conditioned on Species and Sex", 
+        data = delomys,
+       names = c("female\nDelomys\ndorsalis", "male\nDelomys\ndorsalis",
+                 
+                 "female\nDelomys\nsublineatus", "male\nDelomys\nsublineatus")
+)
+```
+
+## Q1-4
+
+Answer the following in your report:
+
+Q1 (2 pts.): Qualitatively describe the relationship between body mass and length.
+
+Does the relationship seem linear, curved, nonexistent?
+
+
+**There seems to be a curved relationship between body mass and length.**
+
+Q2 (2 pts.): Qualitatively describe the shapes of the histograms.
+Do the data appear normally-distributed? Explain why or why not.
+
+**Yes, the shape of the histogram of body mass is largely symetric about values between 40 - 50 and the histogram of body length is largely symmetric about values between 100 - 125.**
+
+Q3 (3 pts.): Using both the histograms and normality tests, do you think the (unconditioned) body masses and body length are normally-distributed?
+Contrast your visual assessment of normality to the results of the numerical normality tests.
+
+**No, the (unconditioned) body masses and body length are not  normally-distributed because the Shapiro tests yield p -values of  4.33e-05 and 2.2e-16 respectively which means we can reject the null hypothesis that the body masses and body length  were sampled from a normally-distributed population.**
+
+Q4 (2 pts.): Examine the conditional boxplots. Describe any graphical evidence you see for body mass differences based on species and/or sex.
+
+**Species Delomys dorsalis have a larger body mass than delomys sublineatus.  Males have a larger body mass than females. Female Delomys dorsalis have larger body mass than male Delomys dorsalis and female Delomys sublineatus have larger body mass than male Delomys sublineatus.**
+
+## Model Building
+
+We know that the normality assumption applies to the residual values after we fit a model.
+
+Using a code chunk, fit 5 models using lm():
+
+Model 1: simple linear regression body_length ~ body_mass
+
+```{r simple linear regression body_length ~ body_mass}
+fit1 = 
+  
+  lm( 
+    formula = body_length ~ body_mass,
+    data = delomys)
+```
+
+Model 2: 1-way ANOVA body_mass ~ sex
+
+```{r 1-way ANOVA body_mass ~ sex}
+fit2 = 
+  
+lm( 
+    formula = body_mass ~ sex,
+    data = delomys)
+```
+
+Model 3: 1-way ANOVA body_mass ~ binomial
+
+```{r 1-way ANOVA body_mass ~ binomial}
+fit3 = 
+  
+lm( 
+    formula = body_mass ~ binomial,
+    data = delomys)
+```
+
+Model 4: 2-way additive ANOVA body_mass ~ sex + binomial
+
+
+```{r 2-way additive ANOVA body_mass ~ sex + binomial}
+
+fit4 = 
+  
+lm( 
+    formula = body_mass ~ sex + binomial,
+    data = delomys)
+```
+
+
+Model 5: 2-way factorial ANOVA body_mass ~ sex * binomial
+
+
+```{r 2-way factorial ANOVA body_mass ~ sex * binomial}
+fit5 = 
+  
+lm( 
+    formula = body_mass ~ sex * binomial,
+    data = delomys)
+```
+
+
+The first model predicts body length as a function of body mass The other models use the categorical variables binomial and sex to predict body mass.
+
+Save your model objects to variables called fit1, fit2, fit3, fit4, fit5.
+
+## Model Diagnostics
+
+Let’s check whether our models fulfill the assumption of normality of the residuals.
+
+First, use a graphical approach: plot histograms of the model residuals.
+
+You can retrieve the model residuals using the residuals() function. For example, I could get the residuals from the first model using residuals(fit1).
+
+```{r residuals from the first model}
+residuals(fit1)
+```
+
+```{r residuals from the second model}
+residuals(fit2)
+```
+
+```{r residuals from the third model}
+residuals(fit3)
+```
+
+```{r residuals from the fourth model}
+residuals(fit4)
+
+```
+
+```{r residuals from the fifth model}
+residuals(fit5)
+```
+
+Use a code chunk to create histograms of the residuals of each of the 5 models.
+
+```{r histograms of the residuals of each of the 5 models}
+par(mfrow = c(3,2))
+
+hist(residuals(fit1), main = "Histogram of Model 1 Residuals", xlab = "Residuals")
+
+hist(residuals(fit2), main = "Histogram of Model 2 Residuals", xlab = "Residuals")
+
+hist(residuals(fit3), main = "Histogram of Model 3 Residuals", xlab = "Residuals")
+
+hist(residuals(fit4), main = "Histogram of Model 4 Residuals", xlab = "Residuals")
+
+hist(residuals(fit4), main = "Histogram of Model 5 Residuals", xlab = "Residuals")
+```
+
+Next, use shapiro.test() on each model to test the null hypothesis that the residuals are drawn from a normally-distributed population.
+
+
+```{r shapiro test on the first model}
+shapiro.test(residuals(fit1))
+```
+
+```{r shapiro test on the second model}
+shapiro.test(residuals(fit2))
+```
+
+```{r shapiro test on the third model}
+shapiro.test(residuals(fit3))
+```
+
+```{r shapiro test on the fourth model}
+shapiro.test(residuals(fit4))
+
+```
+
+```{r shapiro test on the fifth model}
+shapiro.test(residuals(fit5))
+```
+
+## Q5-6
+
+Answer the following in your report:
+
+Q5 (2 pts.): What do you conclude about residual normality based on the numerical and graphical diagnostics?
+
+**The normality assumption applies to the residual values after we fit a model. The shapiro test for models 1-5  yields p-values of 2.2e-16, 0.0001541, 8.103e-05, 6.805e-05 and 6.816e-05. This means we can reject the null hypothesis that the models' residuals are normally-distributed.**
+, 
+Q6 (1 pt.): Are violations of the normality assumption equally severe for all the models?
+
+**No, violations of the normality assumption are most severe for model 1,   least severe for model 2 with models 3,4 and 5 within this range.**
+
+## Model Interpretation
+
+You can use the following code within a code chunk to print out a nicely formatted model coefficient table:
+
+knitr::kable(coef(summary(my_model_fit)))
+
+where my_model_fit is the name of your fitted model object.
+
+You can use similar syntax to print a nicely formatted ANOVA table: knitr::kable(anova(my_model_fit))
+
+Check out the digits argument to control how many decimal digits are printed.
+
+## Q 7-9
+
+### Body Length
+
+Print the model coefficient table using summary() and answer the following:
+
+```{r}
+knitr::kable(coef(summary(fit1)))
+```
+
+Q7 (2 pts.): What is the magnitude of the mass/length relationship?
+
+**The magnitude of the mass/length relationship is 0.880.**
+
+Q8 (2 pts.): What is the expected body length of  an animal that weighs 100g?
+
+**The expected body length is 76.124 + 0.880*100 = 164.124 INSERT UNITS.**
+
+Q9 (2 pts.): What is the expected body length of an animal that weighs 0g?
+
+**The expected body length is 76.124 + 0.880*0 = 76.124 INSERT UNITS.**
+
+## Q 10-13
+
+### Body Mass: Model Coefficients
+
+Print the model coefficient tables for each of the body mass model fits.
+
+```{r}
+knitr::kable(coef(summary(fit2)))
+```
+
+```{r}
+knitr::kable(coef(summary(fit3)))
+```
+
+```{r}
+knitr::kable(coef(summary(fit4)))
+```
+
+```{r}
+knitr::kable(coef(summary(fit5)))
+```
+
+
+Answer the following:
+
+Q10 (1 pt.): What is the base level for sex?
+
+**The base level for sex is female.**
+
+Q11 (1 pt.): What is the base level for binomial?
+
+**The base level for binomial is Delomys dorsalis.**
+
+Q12 (1 pt.): Which sex is heavier?
+
+**Males are heavier than females.**
+
+Q13 (1 pt.): Which species is heavier?
+
+**Delomys dorsalis are heavier than binomial Delomys sublineatus.**
+
+## Q 14-16
+
+### Body Mass: ANOVA
+
+Print the ANOVA tables for each of the body mass models.
+
+```{r}
+knitr::kable(anova(fit2))
+```
+
+```{r}
+knitr::kable(anova(fit3))
+```
+
+
+```{r}
+knitr::kable(anova(fit4))
+```
+
+
+```{r}
+knitr::kable(anova(fit5))
+```
+
+Answer the following in your report:
+
+Q14 (1 pt.): Are sex and species significant predictors for body mass?
+
+**The sex and species predictors have p-values of 0.0001951 and 0, respectively which are less than 0.005 and so yes, they are significant.**
+
+Q15 (1 pt.): Is there a significant interaction?
+
+**No, the p-value for the interaction is  0.950 which is greater than 0.005.**
+
+Q16 (2 pts.): How dos the significance (as measured by p-value) of either of the main effects (sex and species) differ between the single-predictor models, the additive model, and the interactive model?
+
+**Single-predictor models and the additive model both  have significance as opposed to the interactive model which does not.**
+
+## Model Comparison: Body Mass
+
+You built four different models of body mass. How do you choose the best one?
+
+One option is to choose the model with the lowest AIC. You can calculate AIC using the appropriately named AIC() function.
+
+Create a code chunk that calculates the AIC values for each of the body mass models.
+
+```{r}
+AIC(fit2)
+```
+
+```{r}
+AIC(fit3)
+```
+
+
+```{r}
+AIC(fit4)
+```
+
+
+```{r}
+AIC(fit5)
+```
+
+## Q17-18
+
+Q17 (1 pt.): Which two models have the lowest AIC?
+
+**Model 4 has the lowest AIC of 12896.73 followed by Model 5 which has a value of 12898.72.**
+
+Q18 (4 pts.): Which of the two models with lowest AIC scores would you select?
+
+Explain your decision based on model fit and the complexity/understanding tradeoff.
+
+**I would choose model 4 because the shapiro test for it yields a p-value of  6.805e-05 which is larger than the p-value for the shapiro test for model 5, 6.816e-05. This means that model 4 does not violate the normality assumption as much as model 5 and is therefore a better model fit. Model 4 also has a lower AIC which means it has a better balance between being a complex enough model that can be used to describe the data while being understandable, than model 5.**
