@@ -402,12 +402,12 @@ Here is an example of observing the probability of observing a count of 3 succes
 pbinom(q = 3, size = 4, p = 0.75)
 ```
 
-### qbinom() FINISH LATER
+### qbinom() 
 
-**qbinorm() is the Quantile function for the binomial distribution that returns the value associated with a specific probability (quantile).**
+**qbinorm() is the Quantile function for the binomial distribution that returns the value associated with a specific position within data (quantile).**
 
 
-Here is an example to determine the median of the binomial distribution  with parameters with 4 trials  and probability of success for each trial = 0.75
+Here is an example to determine the median (50th quantile) of the binomial distribution  with 4 trials  and a probability of success for each trial equal to 0.75.
 
 ```{r}
 qbinom(p = 0.50, size = 4, prob = 0.75)
