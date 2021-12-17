@@ -254,11 +254,11 @@ pre code {
 <p>Answer the following in your report:</p>
 <p>Q1 (2 pts.): Qualitatively describe the relationship between body mass and length.</p>
 <p>Does the relationship seem linear, curved, nonexistent?</p>
-<p><strong>There seems to be a curved relationship between body mass and length.</strong></p>
+<p><strong>There seems to be a positive linear relationship between body mass and length with outliers above and below this trend.</strong></p>
 <p>Q2 (2 pts.): Qualitatively describe the shapes of the histograms. Do the data appear normally-distributed? Explain why or why not.</p>
-<p><strong>Yes, the shape of the histogram of body mass is largely symetric about values between 40 - 50 and the histogram of body length is largely symmetric about values between 100 - 125.</strong></p>
+<p><strong>No. The histogram of Delomys body mass is not symmetric since there are more body masses in the range of 40 to 80 than 0 to 40, in addition to body masses greater than 80.The histogram of Delomys body length appears to be right skewed.</strong></p>
 <p>Q3 (3 pts.): Using both the histograms and normality tests, do you think the (unconditioned) body masses and body length are normally-distributed? Contrast your visual assessment of normality to the results of the numerical normality tests.</p>
-<p><strong>No, the (unconditioned) body masses and body length are not normally-distributed because the Shapiro tests yield p -values of 4.33e-05 and 2.2e-16 respectively which means we can reject the null hypothesis that the body masses and body length were sampled from a normally-distributed population.</strong></p>
+<p><strong>No, the (unconditioned) body masses and body length are not normally-distributed because the Shapiro tests yield p -values of 4.33e-05 and 2.2e-16 ,respectively, which means we can reject the null hypothesis that the body masses and body length were sampled from a normally-distributed population.</strong></p>
 <p>Q4 (2 pts.): Examine the conditional boxplots. Describe any graphical evidence you see for body mass differences based on species and/or sex.</p>
 <p><strong>Species Delomys dorsalis have a larger body mass than delomys sublineatus. Males have a larger body mass than females. Female Delomys dorsalis have larger body mass than male Delomys dorsalis and female Delomys sublineatus have larger body mass than male Delomys sublineatus.</strong></p>
 </div>
@@ -3210,8 +3210,9 @@ hist(residuals(fit4), main = &quot;Histogram of Model 5 Residuals&quot;, xlab = 
 <h2>Q5-6</h2>
 <p>Answer the following in your report:</p>
 <p>Q5 (2 pts.): What do you conclude about residual normality based on the numerical and graphical diagnostics?</p>
-<p><strong>The normality assumption applies to the residual values after we fit a model. The shapiro test for models 1-5 yields p-values of 2.2e-16, 0.0001541, 8.103e-05, 6.805e-05 and 6.816e-05. This means we can reject the null hypothesis that the models’ residuals are normally-distributed.</strong> , Q6 (1 pt.): Are violations of the normality assumption equally severe for all the models?</p>
-<p><strong>No, violations of the normality assumption are most severe for model 1, least severe for model 2 with models 3,4 and 5 within this range.</strong></p>
+<p><strong>The normality assumption applies to the residual values after we fit a model. While histograms of models 1-5 appear to be normally distributed due to their symmetry, the Shapiro test for models 1-5 yields p-values of 2.2e-16, 0.0001541, 8.103e-05, 6.805e-05 and 6.816e-05. This means we can reject the null hypothesis that the models’ residuals are normally-distributed.</strong></p>
+<p>Q6 (1 pt.): Are violations of the normality assumption equally severe for all the models?</p>
+<p><strong>No, violations of the normality assumption are most severe for model 1, least severe for model 2, with models 3,4 and 5 having about equal severity within this range.</strong></p>
 </div>
 <div id="model-interpretation" class="section level2">
 <h2>Model Interpretation</h2>
@@ -3255,11 +3256,11 @@ hist(residuals(fit4), main = &quot;Histogram of Model 5 Residuals&quot;, xlab = 
 </tbody>
 </table>
 <p>Q7 (2 pts.): What is the magnitude of the mass/length relationship?</p>
-<p><strong>The magnitude of the mass/length relationship is 0.880.</strong></p>
+<p><strong>The magnitude of the mass/length relationship is 0.880 units.</strong></p>
 <p>Q8 (2 pts.): What is the expected body length of an animal that weighs 100g?</p>
-<p>**The expected body length is 76.124 + 0.880*100 = 164.124 INSERT UNITS.**</p>
+<p>**The expected body length is 76.124 + 0.880*100 = 164.124 units.**</p>
 <p>Q9 (2 pts.): What is the expected body length of an animal that weighs 0g?</p>
-<p>**The expected body length is 76.124 + 0.880*0 = 76.124 INSERT UNITS.**</p>
+<p>**The expected body length is 76.124 + 0.880*0 = 76.124 units**</p>
 </div>
 </div>
 <div id="q-10-13" class="section level2">
@@ -3415,7 +3416,7 @@ hist(residuals(fit4), main = &quot;Histogram of Model 5 Residuals&quot;, xlab = 
 <p>Q12 (1 pt.): Which sex is heavier?</p>
 <p><strong>Males are heavier than females.</strong></p>
 <p>Q13 (1 pt.): Which species is heavier?</p>
-<p><strong>Delomys dorsalis are heavier than binomial Delomys sublineatus.</strong></p>
+<p><strong>Delomys dorsalis are heavier than Delomys sublineatus.</strong></p>
 </div>
 </div>
 <div id="q-14-16" class="section level2">
@@ -3577,7 +3578,7 @@ hist(residuals(fit4), main = &quot;Histogram of Model 5 Residuals&quot;, xlab = 
 <p>Q15 (1 pt.): Is there a significant interaction?</p>
 <p><strong>No, the p-value for the interaction is 0.950 which is greater than 0.005.</strong></p>
 <p>Q16 (2 pts.): How dos the significance (as measured by p-value) of either of the main effects (sex and species) differ between the single-predictor models, the additive model, and the interactive model?</p>
-<p><strong>Single-predictor models and the additive model both have significance as opposed to the interactive model which does not.</strong></p>
+<p><strong>Single-predictor models and the additive model both have significance as opposed to the interactive model which does not. sex is more significant in the additive model than in the single-predictor model due to a lower p-value. Species is equally significant in both the single-predictor model and additive model.</strong></p>
 </div>
 </div>
 <div id="model-comparison-body-mass" class="section level2">
@@ -3600,7 +3601,7 @@ hist(residuals(fit4), main = &quot;Histogram of Model 5 Residuals&quot;, xlab = 
 <p><strong>Model 4 has the lowest AIC of 12896.73 followed by Model 5 which has a value of 12898.72.</strong></p>
 <p>Q18 (4 pts.): Which of the two models with lowest AIC scores would you select?</p>
 <p>Explain your decision based on model fit and the complexity/understanding tradeoff.</p>
-<p><strong>I would choose model 4 because the shapiro test for it yields a p-value of 6.805e-05 which is larger than the p-value for the shapiro test for model 5, 6.816e-05. This means that model 4 does not violate the normality assumption as much as model 5 and is therefore a better model fit. Model 4 also has a lower AIC which means it has a better balance between being a complex enough model that can be used to describe the data while being understandable, than model 5.</strong></p>
+<p><strong>I would choose model 4 because the Shapiro test for it yields a p-value of 6.805e-05 which is larger than the p-value for the Shapiro test for model 5, 6.816e-05. This means that model 4 does not violate the normality assumption as much as model 5 and is therefore a better model fit. Model 4 also has a lower AIC which means it has a better balance between being a complex enough model that can be used to describe the data while being understandable, than model 5.</strong></p>
 </div>
 </div>
 
